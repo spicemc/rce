@@ -52,7 +52,7 @@ export class MiddlewareMetadata {
    */
   get instance(): ExpressMiddlewareInterface | KoaMiddlewareInterface | ExpressErrorMiddlewareInterface {
     return getFromContainer<ExpressMiddlewareInterface | KoaMiddlewareInterface | ExpressErrorMiddlewareInterface>(
-      this.target
+      this.target,
     );
   }
 }

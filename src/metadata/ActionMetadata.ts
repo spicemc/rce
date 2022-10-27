@@ -156,7 +156,7 @@ export class ActionMetadata {
   constructor(
     controllerMetadata: ControllerMetadata,
     args: ActionMetadataArgs,
-    private globalOptions: RoutingControllersOptions
+    private globalOptions: RoutingControllersOptions,
   ) {
     this.controllerMetadata = controllerMetadata;
     this.route = args.route;
@@ -196,7 +196,7 @@ export class ActionMetadata {
    */
   build(responseHandlers: ResponseHandlerMetadata[]) {
     const classTransformerResponseHandler = responseHandlers.find(
-      handler => handler.type === 'response-class-transform-options'
+      handler => handler.type === 'response-class-transform-options',
     );
     const undefinedResultHandler = responseHandlers.find(handler => handler.type === 'on-undefined');
     const nullResultHandler = responseHandlers.find(handler => handler.type === 'on-null');
@@ -234,7 +234,7 @@ export class ActionMetadata {
 
     this.isAuthorizedUsed = this.controllerMetadata.isAuthorizedUsed || !!authorizedHandler;
     this.authorizedRoles = (this.controllerMetadata.authorizedRoles || []).concat(
-      (authorizedHandler && authorizedHandler.value) || []
+      (authorizedHandler && authorizedHandler.value) || [],
     );
   }
 
@@ -267,7 +267,7 @@ export class ActionMetadata {
       return this.route;
     }
 
-    let path: string = '';
+    let path = '';
     if (this.controllerMetadata.route) path += this.controllerMetadata.route;
     if (this.route && typeof this.route === 'string') path += this.route;
     return path;

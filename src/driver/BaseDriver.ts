@@ -63,7 +63,7 @@ export abstract class BaseDriver {
   /**
    * Global application prefix.
    */
-  routePrefix: string = '';
+  routePrefix = '';
 
   /**
    * Indicates if cors are enabled.
@@ -129,7 +129,7 @@ export abstract class BaseDriver {
             key !== 'stack' &&
             key !== 'name' &&
             key !== 'message' &&
-            (!(error instanceof HttpError) || key !== 'httpCode')
+            (!(error instanceof HttpError) || key !== 'httpCode'),
         )
         .forEach(key => (processedError[key] = (error as any)[key]));
 

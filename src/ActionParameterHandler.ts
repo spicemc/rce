@@ -110,7 +110,7 @@ export class ActionParameterHandler<T extends BaseDriver> {
             const ParamType: Function | undefined = (Reflect as any).getMetadata(
               'design:type',
               param.targetType.prototype,
-              key
+              key,
             );
             if (ParamType) {
               const typeString = ParamType.name.toLowerCase();
@@ -122,7 +122,7 @@ export class ActionParameterHandler<T extends BaseDriver> {
               });
             }
           }
-        })
+        }),
       );
     }
 
@@ -243,7 +243,7 @@ export class ActionParameterHandler<T extends BaseDriver> {
         .then(() => value)
         .catch((validationErrors: ValidationError[]) => {
           const error: any = new BadRequestError(
-            `Invalid ${paramMetadata.type}, check 'errors' property for more info.`
+            `Invalid ${paramMetadata.type}, check 'errors' property for more info.`,
           );
           error.errors = validationErrors;
           error.paramName = paramMetadata.name;

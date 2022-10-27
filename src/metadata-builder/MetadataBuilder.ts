@@ -67,7 +67,7 @@ export class MetadataBuilder {
         new InterceptorMetadata({
           ...interceptorArgs,
           interceptor: interceptorArgs.target,
-        })
+        }),
     );
   }
 

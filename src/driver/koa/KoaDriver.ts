@@ -151,7 +151,7 @@ export class KoaDriver extends BaseDriver {
 
     // finally register action in koa
     this.router[actionMetadata.type.toLowerCase()](
-      ...[route, routeGuard, ...beforeMiddlewares, ...defaultMiddlewares, routeHandler, ...afterMiddlewares]
+      ...[route, routeGuard, ...beforeMiddlewares, ...defaultMiddlewares, routeHandler, ...afterMiddlewares],
     );
   }
 
@@ -169,15 +169,16 @@ export class KoaDriver extends BaseDriver {
   getParamFromRequest(actionOptions: Action, param: ParamMetadata): any {
     const context = actionOptions.context;
     const request: any = actionOptions.request;
+    const paramName = param.name ?? '';
     switch (param.type) {
       case 'body':
         return request.body;
 
       case 'body-param':
-        return request.body[param.name];
+        return request.body[paramName];
 
       case 'param':
-        return context.params[param.name];
+        return context.params[paramName];
 
       case 'params':
         return context.params;
@@ -186,14 +187,14 @@ export class KoaDriver extends BaseDriver {
         return context.session;
 
       case 'session-param':
-        return context.session[param.name];
+        return context.session[paramName];
 
       case 'state':
         if (param.name) return context.state[param.name];
         return context.state;
 
       case 'query':
-        return context.query[param.name];
+        return context.query[paramName];
 
       case 'queries':
         return context.query;
@@ -205,7 +206,7 @@ export class KoaDriver extends BaseDriver {
         return actionOptions.context.req.files;
 
       case 'header':
-        return context.headers[param.name.toLowerCase()];
+        return context.headers[paramName.toLowerCase()];
 
       case 'headers':
         return request.headers;
@@ -213,7 +214,7 @@ export class KoaDriver extends BaseDriver {
       case 'cookie':
         if (!context.headers.cookie) return;
         const cookies = cookie.parse(context.headers.cookie);
-        return cookies[param.name];
+        return cookies[paramName];
 
       case 'cookies':
         if (!request.headers.cookie) return {};
@@ -227,7 +228,9 @@ export class KoaDriver extends BaseDriver {
   handleSuccess(result: any, action: ActionMetadata, options: Action): void {
     // if the action returned the context or the response object itself, short-circuits
     if (result && (result === options.response || result === options.context)) {
-      return options.next();
+      if (typeof options.next === 'function') {
+        return options.next();
+      }
     }
 
     // transform result if needed
@@ -285,14 +288,16 @@ export class KoaDriver extends BaseDriver {
       options.response.set(name, action.headers[name]);
     });
 
-    return options.next();
+    if (typeof options.next === 'function') {
+      return options.next();
+    }
   }
 
   /**
    * Handles result of failed executed controller action.
    */
   handleError(error: any, action: ActionMetadata | undefined, options: Action) {
-    return new Promise((resolve, reject) => {
+    return new Promise<void>((resolve, reject) => {
       if (this.isDefaultErrorHandlingEnabled) {
         // apply http headers
         if (action) {
@@ -379,7 +384,7 @@ export class KoaDriver extends BaseDriver {
           this.router = new (require('koa-router'))();
         } catch (e) {
           throw new Error(
-            'koa-router package was not found installed. Try to install it: npm install koa-router@next --save'
+            'koa-router package was not found installed. Try to install it: npm install koa-router@next --save',
           );
         }
       }

@@ -136,7 +136,7 @@ export class RoutingControllers<T extends BaseDriver> {
     result: any,
     action: ActionMetadata,
     options: Action,
-    interceptorFns: Function[]
+    interceptorFns: Function[],
   ): any {
     if (isPromiseLike(result)) {
       return result
