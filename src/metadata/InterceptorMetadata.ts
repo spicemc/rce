@@ -2,6 +2,7 @@ import { UseInterceptorMetadataArgs } from './args/UseInterceptorMetadataArgs';
 import { Newable, Callable } from '@rce/types/Types';
 import { ClassConstructor } from 'class-transformer';
 import { InterceptorInterface } from '..';
+import { Action } from '@rce/Action';
 
 /**
  * "Use interceptor" metadata.
@@ -24,7 +25,7 @@ export class InterceptorMetadata {
   /**
    * Interceptor class or function to be executed by this "use".
    */
-  interceptor: ClassConstructor<InterceptorInterface>;
+  interceptor: ClassConstructor<InterceptorInterface> | ((action: Action, result: any) => any);
 
   /**
    * Indicates if this interceptor is global or not.

@@ -61,7 +61,7 @@ export function useContainer(iocAdapter: IocAdapter, options?: UseContainerOptio
  * @param someClass A class constructor to resolve
  * @param action The request/response context that `someClass` is being resolved for
  */
-export function getFromContainer<T>(someClass: ClassConstructor<T> | Newable, action?: Action): T {
+export function getFromContainer<T>(someClass: ClassConstructor<T>, action?: Action): T {
   if (userContainer) {
     try {
       const instance = userContainer.get(someClass, action);

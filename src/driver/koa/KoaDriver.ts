@@ -12,6 +12,7 @@ import { getFromContainer } from '../../container';
 import { RoleChecker } from '../../RoleChecker';
 import { AuthorizationRequiredError } from '../../error/AuthorizationRequiredError';
 import { HttpError, NotFoundError } from '../../index';
+import { Callable } from '@rce/types/Types';
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const cookie = require('cookie');
@@ -74,7 +75,7 @@ export class KoaDriver extends BaseDriver {
     const defaultMiddlewares: any[] = [];
 
     if (actionMetadata.isAuthorizedUsed) {
-      defaultMiddlewares.push((context: any, next: Function) => {
+      defaultMiddlewares.push((context: any, next: Callable) => {
         if (!this.authorizationChecker) throw new AuthorizationCheckerNotDefinedError();
 
         const action: Action = { request: context.request, response: context.response, context, next };
@@ -334,7 +335,7 @@ export class KoaDriver extends BaseDriver {
    * Creates middlewares from the given "use"-s.
    */
   protected prepareMiddlewares(uses: UseMetadata[]) {
-    const middlewareFunctions: Function[] = [];
+    const middlewareFunctions: Callable[] = [];
     uses.forEach(use => {
       if (use.middleware.prototype && use.middleware.prototype.use) {
         // if this is function instance of MiddlewareInterface
@@ -409,7 +410,7 @@ export class KoaDriver extends BaseDriver {
    *
    * This bug should be fixed by koa-multer PR #15: https://github.com/koa-modules/multer/pull/15
    */
-  private async fixMulterRequestAssignment(ctx: any, next: Function) {
+  private async fixMulterRequestAssignment(ctx: any, next: Callable) {
     if ('request' in ctx) {
       if (ctx.req.body) ctx.request.body = ctx.req.body;
       if (ctx.req.file) ctx.request.file = ctx.req.file;

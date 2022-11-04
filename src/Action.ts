@@ -23,5 +23,5 @@ export interface Action {
   /**
    * "Next" function used to call next middleware.
    */
-  next?: Newable | Callable;
+  next?: Callable;
 }

@@ -1,12 +1,12 @@
 import { getMetadataArgsStorage } from '../index';
-import { Newable, Callable } from '@rce/types/Types';
+import { Callable } from '@rce/types/Types';
 
 /**
  * Marks given class as a middleware.
  * Allows to create global middlewares and control order of middleware execution.
  */
 export function Middleware(options: { type: 'after' | 'before'; priority?: number }): Callable {
-  return function (target: Newable | Callable) {
+  return function (target: any) {
     getMetadataArgsStorage().middlewares.push({
       target: target,
       type: options && options.type ? options.type : 'before',

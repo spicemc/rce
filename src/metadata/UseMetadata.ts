@@ -1,4 +1,5 @@
 import { UseMetadataArgs } from './args/UseMetadataArgs';
+import { Newable } from '@rce/types/Types';
 
 /**
  * "Use middleware" metadata.
@@ -11,7 +12,7 @@ export class UseMetadata {
   /**
    * Object class of the middleware class.
    */
-  target: Function;
+  target: Newable;
 
   /**
    * Method used by this "use".
@@ -21,7 +22,7 @@ export class UseMetadata {
   /**
    * Middleware to be executed by this "use".
    */
-  middleware: Function;
+  middleware: any;
 
   /**
    * Indicates if middleware must be executed after routing action is executed.

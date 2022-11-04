@@ -12,6 +12,7 @@ import { isPromiseLike } from '../../util/isPromiseLike';
 import { getFromContainer } from '../../container';
 import { AuthorizationRequiredError } from '../../error/AuthorizationRequiredError';
 import { NotFoundError } from '../../index';
+import { Callable } from '@rce/types/Types';
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const cookie = require('cookie');
@@ -108,7 +109,7 @@ export class ExpressDriver extends BaseDriver {
     }
 
     if (actionMetadata.isAuthorizedUsed) {
-      defaultMiddlewares.push((request: any, response: any, next: Function) => {
+      defaultMiddlewares.push((request: any, response: any, next: Callable) => {
         if (!this.authorizationChecker) throw new AuthorizationCheckerNotDefinedError();
 
         const action: Action = { request, response, next };
@@ -161,7 +162,7 @@ export class ExpressDriver extends BaseDriver {
 
     // prepare route and route handler function
     const route = ActionMetadata.appendBaseRoute(this.routePrefix, actionMetadata.fullRoute);
-    const routeHandler = function routeHandler(request: any, response: any, next: Function) {
+    const routeHandler = function routeHandler(request: any, response: any, next: Callable) {
       return executeCallback({ request, response, next });
     };
 
@@ -173,7 +174,7 @@ export class ExpressDriver extends BaseDriver {
     //   This causes a double execution on our side.
     // * Multiple routes match the request (e.g. GET /users/me matches both @All(/users/me) and @Get(/users/:id)).
     // The following middleware only starts an action processing if the request has not been processed before.
-    const routeGuard = function routeGuard(request: any, response: any, next: Function) {
+    const routeGuard = function routeGuard(request: any, response: any, next: Callable) {
       if (!request.routingControllersStarted) {
         request.routingControllersStarted = true;
         return next();
@@ -405,7 +406,7 @@ export class ExpressDriver extends BaseDriver {
    * Creates middlewares from the given "use"-s.
    */
   protected prepareMiddlewares(uses: UseMetadata[]) {
-    const middlewareFunctions: Function[] = [];
+    const middlewareFunctions: Callable[] = [];
     uses.forEach((use: UseMetadata) => {
       if (use.middleware.prototype && use.middleware.prototype.use) {
         // if this is function instance of MiddlewareInterface

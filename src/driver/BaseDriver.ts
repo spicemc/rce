@@ -8,7 +8,7 @@ import { ActionMetadata } from '../metadata/ActionMetadata';
 import { ParamMetadata } from '../metadata/ParamMetadata';
 import { MiddlewareMetadata } from '../metadata/MiddlewareMetadata';
 import { Action } from '../Action';
-import { Newable } from '@rce/types/Types';
+import { ClassType } from '@rce/types/Types';
 
 /**
  * Base driver functionality for all other drivers.
@@ -70,7 +70,7 @@ export abstract class BaseDriver {
    * Indicates if cors are enabled.
    * This requires installation of additional module (cors for express and kcors for koa).
    */
-  cors?: boolean | Newable;
+  cors?: boolean | ClassType;
 
   /**
    * Map of error overrides.

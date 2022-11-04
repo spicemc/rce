@@ -1,5 +1,3 @@
-import { Newable, Callable } from '@rce/types/Types';
-
 /**
  * Metadata used to store registered middlewares.
  */
@@ -18,7 +16,7 @@ export interface UseMetadataArgs {
   /**
    * Middleware to be executed for this "use".
    */
-  middleware: Newable | Callable;
+  middleware: any;
 
   /**
    * Indicates if middleware must be executed after routing action is executed.

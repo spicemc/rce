@@ -1,6 +1,6 @@
 import { HandlerOptions } from '../decorator-options/HandlerOptions';
 import { getMetadataArgsStorage } from '../index';
-import { DecoratorFunction, ClassType } from '@rce/types/Types';
+import { DecoratorFunction } from '@rce/types/Types';
 
 /**
  * Registers a controller method to be executed when DELETE request comes on a given route.
@@ -19,7 +19,7 @@ export function Delete(route?: string, options?: HandlerOptions): DecoratorFunct
  * Must be applied on a controller action.
  */
 export function Delete(route?: string | RegExp, options?: HandlerOptions): DecoratorFunction {
-  return function (object: ClassType, methodName: string) {
+  return function (object: any, methodName: string) {
     getMetadataArgsStorage().actions.push({
       type: 'delete',
       target: object.constructor,

@@ -1,5 +1,5 @@
 import { getMetadataArgsStorage } from '../index';
-import { DecoratorFunction, ClassType, Newable } from '@rce/types/Types';
+import { DecoratorFunction, Newable } from '@rce/types/Types';
 
 /**
  * Used to set specific HTTP status code when result returned by a controller action is equal to null.
@@ -18,7 +18,7 @@ export function OnNull(error: Newable): DecoratorFunction;
  * Must be applied on a controller action.
  */
 export function OnNull(codeOrError: number | Newable): DecoratorFunction {
-  return function (object: ClassType, methodName: string) {
+  return function (object: any, methodName: string) {
     getMetadataArgsStorage().responseHandlers.push({
       type: 'on-null',
       target: object.constructor,

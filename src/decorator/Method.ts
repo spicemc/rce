@@ -1,7 +1,7 @@
 import { HandlerOptions } from '../decorator-options/HandlerOptions';
 import { getMetadataArgsStorage } from '../index';
 import { ActionType } from '../metadata/types/ActionType';
-import { DecoratorFunction, ClassType } from '@rce/types/Types';
+import { DecoratorFunction } from '@rce/types/Types';
 
 /**
  * Registers an action to be executed when request with specified method comes on a given route.
@@ -20,7 +20,7 @@ export function Method(method: ActionType, route?: string, options?: HandlerOpti
  * Must be applied on a controller action.
  */
 export function Method(method: ActionType, route?: string | RegExp, options?: HandlerOptions): DecoratorFunction {
-  return function (object: ClassType, methodName: string) {
+  return function (object: any, methodName: string) {
     getMetadataArgsStorage().actions.push({
       type: method,
       target: object.constructor,

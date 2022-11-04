@@ -1,4 +1,4 @@
-import { Newable, Callable } from '@rce/types/Types';
+import { Newable } from '@rce/types/Types';
 
 /**
  * Metadata used to store registered middlewares.
@@ -7,7 +7,7 @@ export interface MiddlewareMetadataArgs {
   /**
    * Object class of the middleware class.
    */
-  target: Newable | Callable;
+  target: Newable;
 
   /**
    * Indicates if this middleware is global, thous applied to all routes.

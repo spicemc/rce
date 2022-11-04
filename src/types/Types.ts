@@ -1,11 +1,8 @@
-import { NextFunction } from 'express';
-import { Next } from 'koa';
-
 // export type NextCallable = NextFunction | Next;
 
-export type Newable = { new(...args: any[]): any; };
+export type Newable = { new(...args: any[]): any };
 
-export type ClassType = {};
+export type ClassType = Record<string, unknown>;
 
 // export type CallableVoid = () => void;
 
@@ -15,4 +12,4 @@ export type ClassType = {};
 
 export type Callable = (...args: any[]) => any;
 
-export type DecoratorFunction = (object: ClassType, methodName: string) => void;
+export type DecoratorFunction = (object: any, methodName: string) => void;
