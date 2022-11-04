@@ -1,3 +1,5 @@
+import { Newable, Callable } from '@rce/types/Types';
+
 /**
  * Metadata used to store registered intercept for a specific controller or controller action.
  */
@@ -5,7 +7,7 @@ export interface UseInterceptorMetadataArgs {
   /**
    * Controller class where this intercept was used.
    */
-  target: Function;
+  target: any;
 
   /**
    * Controller method to which this intercept is applied.
@@ -17,7 +19,7 @@ export interface UseInterceptorMetadataArgs {
   /**
    * Interceptor class or a function to be executed.
    */
-  interceptor: Function;
+  interceptor: Newable | Callable;
 
   /**
    * Indicates if this interceptor is global, thous applied to all routes.

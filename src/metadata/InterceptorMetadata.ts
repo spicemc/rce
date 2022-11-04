@@ -1,4 +1,5 @@
 import { UseInterceptorMetadataArgs } from './args/UseInterceptorMetadataArgs';
+import { Newable, Callable } from '@rce/types/Types';
 
 /**
  * "Use interceptor" metadata.
@@ -11,22 +12,22 @@ export class InterceptorMetadata {
   /**
    * Object class of the interceptor class.
    */
-  target: Function;
+  target: Newable | Callable;
 
   /**
    * Method used by this "use".
    */
-  method: string;
+  method?: string;
 
   /**
    * Interceptor class or function to be executed by this "use".
    */
-  interceptor: Function;
+  interceptor: Newable | Callable;
 
   /**
    * Indicates if this interceptor is global or not.
    */
-  global: boolean;
+  global?: boolean;
 
   /**
    * Interceptor priority. Used for global interceptors.

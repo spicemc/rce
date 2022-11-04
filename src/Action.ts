@@ -1,3 +1,5 @@
+import { Newable, Callable } from '@rce/types/Types';
+
 /**
  * Controller action properties.
  */
@@ -21,5 +23,5 @@ export interface Action {
   /**
    * "Next" function used to call next middleware.
    */
-  next?: Function;
+  next?: Newable | Callable;
 }

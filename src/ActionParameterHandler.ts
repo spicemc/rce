@@ -10,6 +10,7 @@ import { AuthorizationRequiredError } from './error/AuthorizationRequiredError';
 import { CurrentUserCheckerNotDefinedError } from './error/CurrentUserCheckerNotDefinedError';
 import { isPromiseLike } from './util/isPromiseLike';
 import { InvalidParamError } from './error/ParamNormalizationError';
+import { Newable } from '@rce/types/Types';
 
 /**
  * Handles action parameter.
@@ -96,6 +97,8 @@ export class ActionParameterHandler<T extends BaseDriver> {
   protected async normalizeParamValue(value: any, param: ParamMetadata): Promise<any> {
     if (value === null || value === undefined) return value;
 
+    const paramName = param.name ?? '';
+
     const isNormalizationNeeded =
       typeof value === 'object' && ['queries', 'headers', 'params', 'cookies'].includes(param.type);
     const isTargetPrimitive = ['number', 'string', 'boolean'].includes(param.targetName);
@@ -107,7 +110,7 @@ export class ActionParameterHandler<T extends BaseDriver> {
         Object.keys(value).map(async key => {
           const keyValue = value[key];
           if (typeof keyValue === 'string') {
-            const ParamType: Function | undefined = (Reflect as any).getMetadata(
+            const ParamType: Newable | undefined = (Reflect as any).getMetadata(
               'design:type',
               param.targetType.prototype,
               key,
@@ -133,13 +136,13 @@ export class ActionParameterHandler<T extends BaseDriver> {
         case 'string':
         case 'boolean':
         case 'date':
-          const normalizedValue = this.normalizeStringValue(value, param.name ?? '', param.targetName);
+          const normalizedValue = this.normalizeStringValue(value, paramName, param.targetName);
           return param.isArray ? [normalizedValue] : normalizedValue;
         case 'array':
           return [value];
       }
     } else if (Array.isArray(value)) {
-      return value.map(v => this.normalizeStringValue(v, param.name ?? '', param.targetName));
+      return value.map(v => this.normalizeStringValue(v, paramName, param.targetName));
     }
 
     // if target type is not primitive, transform and validate it
