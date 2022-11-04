@@ -1,5 +1,7 @@
 import { UseInterceptorMetadataArgs } from './args/UseInterceptorMetadataArgs';
 import { Newable, Callable } from '@rce/types/Types';
+import { ClassConstructor } from 'class-transformer';
+import { InterceptorInterface } from '..';
 
 /**
  * "Use interceptor" metadata.
@@ -22,7 +24,7 @@ export class InterceptorMetadata {
   /**
    * Interceptor class or function to be executed by this "use".
    */
-  interceptor: Newable | Callable;
+  interceptor: ClassConstructor<InterceptorInterface>;
 
   /**
    * Indicates if this interceptor is global or not.
@@ -42,7 +44,7 @@ export class InterceptorMetadata {
     this.target = args.target;
     this.method = args.method;
     this.interceptor = args.interceptor;
-    this.priority = args.priority;
+    this.priority = args.priority ?? 0;
     this.global = args.global;
   }
 }

@@ -30,7 +30,7 @@ export class MetadataBuilder {
   /**
    * Builds middleware metadata from a registered middleware metadata args.
    */
-  buildMiddlewareMetadata(classes?: Function[]): MiddlewareMetadata[] {
+  buildMiddlewareMetadata(classes?: Function[]): (MiddlewareMetadata | undefined)[] {
     return this.createMiddlewares(classes);
   }
 
@@ -48,11 +48,11 @@ export class MetadataBuilder {
   /**
    * Creates middleware metadatas.
    */
-  protected createMiddlewares(classes?: Function[]): MiddlewareMetadata[] {
+  protected createMiddlewares(classes?: Function[]): (MiddlewareMetadata | undefined)[] {
     const middlewares = !classes
       ? getMetadataArgsStorage().middlewares
       : getMetadataArgsStorage().filterMiddlewareMetadatasForClasses(classes);
-    return middlewares.map(middlewareArgs => new MiddlewareMetadata(middlewareArgs));
+    return middlewares.map(middlewareArgs => middlewareArgs ? new MiddlewareMetadata(middlewareArgs) : undefined);
   }
 
   /**

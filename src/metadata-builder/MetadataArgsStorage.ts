@@ -62,7 +62,7 @@ export class MetadataArgsStorage {
   /**
    * Filters registered middlewares by a given classes.
    */
-  filterMiddlewareMetadatasForClasses(classes: Function[]): MiddlewareMetadataArgs[] {
+  filterMiddlewareMetadatasForClasses(classes: Function[]): (MiddlewareMetadataArgs | undefined)[] {
     return classes.map(cls => this.middlewares.find(mid => mid.target === cls)).filter(midd => midd !== undefined); // this might be not needed if all classes where decorated with `@Middleware`
   }
 
@@ -94,7 +94,7 @@ export class MetadataArgsStorage {
   /**
    * Filters registered "use middlewares" by a given target class and method name.
    */
-  filterUsesWithTargetAndMethod(target: Function, methodName: string): UseMetadataArgs[] {
+  filterUsesWithTargetAndMethod(target: Function, methodName?: string): UseMetadataArgs[] {
     return this.uses.filter(use => {
       return use.target === target && use.method === methodName;
     });
@@ -103,7 +103,7 @@ export class MetadataArgsStorage {
   /**
    * Filters registered "use interceptors" by a given target class and method name.
    */
-  filterInterceptorUsesWithTargetAndMethod(target: Function, methodName: string): UseInterceptorMetadataArgs[] {
+  filterInterceptorUsesWithTargetAndMethod(target: Function, methodName?: string): UseInterceptorMetadataArgs[] {
     return this.useInterceptors.filter(use => {
       return use.target === target && use.method === methodName;
     });

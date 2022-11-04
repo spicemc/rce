@@ -1,4 +1,7 @@
 import { Newable, Callable } from '@rce/types/Types';
+import { ClassConstructor } from 'class-transformer';
+import { InterceptorInterface } from '../../InterceptorInterface';
+import { Action } from '@rce/Action';
 
 /**
  * Metadata used to store registered intercept for a specific controller or controller action.
@@ -19,7 +22,7 @@ export interface UseInterceptorMetadataArgs {
   /**
    * Interceptor class or a function to be executed.
    */
-  interceptor: Newable | Callable;
+  interceptor: ClassConstructor<InterceptorInterface> | ((action: Action, result: any) => any);
 
   /**
    * Indicates if this interceptor is global, thous applied to all routes.
@@ -29,5 +32,5 @@ export interface UseInterceptorMetadataArgs {
   /**
    * Execution priority of the interceptor.
    */
-  priority?: number;
+  priority: number;
 }
