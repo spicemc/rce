@@ -1,6 +1,6 @@
 // export type NextCallable = NextFunction | Next;
 
-export type Newable = { new(...args: any[]): any };
+export type Newable = { new (...args: any[]): any };
 
 export type ClassType = Record<string, unknown>;
 

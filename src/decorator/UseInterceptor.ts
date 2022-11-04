@@ -20,14 +20,16 @@ export function UseInterceptor(...interceptors: Array<(action: Action, result: a
  * Specifies a given interceptor middleware or interceptor function to be used for controller or controller action.
  * Must be set to controller action or controller class.
  */
-export function UseInterceptor(...interceptors: Array<ClassConstructor<InterceptorInterface> | ((action: Action, result: any) => any)>): Callable {
+export function UseInterceptor(
+  ...interceptors: Array<ClassConstructor<InterceptorInterface> | ((action: Action, result: any) => any)>
+): Callable {
   return function (objectOrFunction: Newable | Callable, methodName?: string, priority?: number) {
     interceptors.forEach(interceptor => {
       getMetadataArgsStorage().useInterceptors.push({
         interceptor: interceptor,
         target: methodName ? objectOrFunction.constructor : (objectOrFunction as Callable),
         method: methodName,
-        priority: priority ?? 0
+        priority: priority ?? 0,
       });
     });
   };

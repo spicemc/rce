@@ -133,12 +133,7 @@ export class RoutingControllers<T extends BaseDriver> {
   /**
    * Handles result of the action method execution.
    */
-  protected handleCallMethodResult(
-    result: any,
-    action: ActionMetadata,
-    options: Action,
-    interceptorFns: any[],
-  ): any {
+  protected handleCallMethodResult(result: any, action: ActionMetadata, options: Action, interceptorFns: any[]): any {
     if (isPromiseLike(result)) {
       return result
         .then((data: any) => {

@@ -12,7 +12,7 @@ export class UseMetadata {
   /**
    * Object class of the middleware class.
    */
-  target: Newable;
+  target: any;
 
   /**
    * Method used by this "use".

@@ -25,7 +25,7 @@ export class InterceptorMetadata {
   /**
    * Interceptor class or function to be executed by this "use".
    */
-  interceptor: ClassConstructor<InterceptorInterface> | ((action: Action, result: any) => any);
+  interceptor: any; //ClassConstructor<InterceptorInterface> | ((action: Action, result: any) => any);
 
   /**
    * Indicates if this interceptor is global or not.
