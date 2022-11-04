@@ -62,7 +62,7 @@ export class MetadataArgsStorage {
   /**
    * Filters registered middlewares by a given classes.
    */
-  filterMiddlewareMetadatasForClasses(classes: Function[]): (MiddlewareMetadataArgs | undefined)[] {
+  filterMiddlewareMetadatasForClasses(classes: Function[]): MiddlewareMetadataArgs[] {
     return classes.map(cls => this.middlewares.find(mid => mid.target === cls)).filter(midd => midd !== undefined); // this might be not needed if all classes where decorated with `@Middleware`
   }
 
