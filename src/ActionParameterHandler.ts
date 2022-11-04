@@ -135,9 +135,10 @@ export class ActionParameterHandler<T extends BaseDriver> {
         case 'number':
         case 'string':
         case 'boolean':
-        case 'date':
+        case 'date': {
           const normalizedValue = this.normalizeStringValue(value, paramName, param.targetName);
           return param.isArray ? [normalizedValue] : normalizedValue;
+        }
         case 'array':
           return [value];
       }
@@ -160,7 +161,7 @@ export class ActionParameterHandler<T extends BaseDriver> {
    */
   protected normalizeStringValue(value: string, parameterName: string, parameterType: string) {
     switch (parameterType) {
-      case 'number':
+      case 'number': {
         if (value === '') {
           throw new InvalidParamError(value, parameterName, parameterType);
         }
@@ -171,7 +172,7 @@ export class ActionParameterHandler<T extends BaseDriver> {
         }
 
         return valueNumber;
-
+      }
       case 'boolean':
         if (value === 'true' || value === '1' || value === '') {
           return true;
@@ -181,13 +182,13 @@ export class ActionParameterHandler<T extends BaseDriver> {
           throw new InvalidParamError(value, parameterName, parameterType);
         }
 
-      case 'date':
+      case 'date': {
         const parsedDate = new Date(value);
         if (Number.isNaN(parsedDate.getTime())) {
           throw new InvalidParamError(value, parameterName, parameterType);
         }
         return parsedDate;
-
+      }
       case 'string':
       default:
         return value;

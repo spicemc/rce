@@ -1,4 +1,3 @@
-import { Newable, Callable } from '@rce/types/Types';
 import { ClassConstructor } from 'class-transformer';
 import { InterceptorInterface } from '../../InterceptorInterface';
 import { Action } from '@rce/Action';

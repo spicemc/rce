@@ -1,4 +1,4 @@
-import { Newable, Callable } from '@rce/types/Types';
+import { Callable } from '@rce/types/Types';
 
 /**
  * Controller action properties.

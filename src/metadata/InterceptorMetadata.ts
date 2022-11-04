@@ -1,8 +1,5 @@
 import { UseInterceptorMetadataArgs } from './args/UseInterceptorMetadataArgs';
 import { Newable, Callable } from '@rce/types/Types';
-import { ClassConstructor } from 'class-transformer';
-import { InterceptorInterface } from '..';
-import { Action } from '@rce/Action';
 
 /**
  * "Use interceptor" metadata.

@@ -82,7 +82,7 @@ export class KoaDriver extends BaseDriver {
         try {
           const checkResult =
             actionMetadata.authorizedRoles instanceof Function
-              ? getFromContainer<RoleChecker>(actionMetadata.authorizedRoles, action).check(action)
+              ? getFromContainer<RoleChecker>(actionMetadata.authorizedRoles as any, action).check(action)
               : this.authorizationChecker(action, actionMetadata.authorizedRoles);
 
           const handleError = (result: any) => {
@@ -212,11 +212,11 @@ export class KoaDriver extends BaseDriver {
       case 'headers':
         return request.headers;
 
-      case 'cookie':
+      case 'cookie': {
         if (!context.headers.cookie) return;
         const cookies = cookie.parse(context.headers.cookie);
         return cookies[paramName];
-
+      }
       case 'cookies':
         if (!request.headers.cookie) return {};
         return cookie.parse(request.headers.cookie);
@@ -365,6 +365,7 @@ export class KoaDriver extends BaseDriver {
     if (require) {
       if (!this.koa) {
         try {
+          // eslint-disable-next-line @typescript-eslint/no-var-requires
           this.koa = new (require('koa'))();
         } catch (e) {
           throw new Error('koa package was not found installed. Try to install it: npm install koa@next --save');
@@ -382,6 +383,7 @@ export class KoaDriver extends BaseDriver {
     if (require) {
       if (!this.router) {
         try {
+          // eslint-disable-next-line @typescript-eslint/no-var-requires
           this.router = new (require('koa-router'))();
         } catch (e) {
           throw new Error(

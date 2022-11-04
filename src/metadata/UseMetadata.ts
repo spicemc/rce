@@ -1,5 +1,4 @@
 import { UseMetadataArgs } from './args/UseMetadataArgs';
-import { Newable } from '@rce/types/Types';
 
 /**
  * "Use middleware" metadata.

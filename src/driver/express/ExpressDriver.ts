@@ -239,11 +239,11 @@ export class ExpressDriver extends BaseDriver {
       case 'files':
         return request.files;
 
-      case 'cookie':
+      case 'cookie': {
         if (!request.headers.cookie) return;
         const cookies = cookie.parse(request.headers.cookie);
         return cookies[paramName];
-
+      }
       case 'cookies':
         if (!request.headers.cookie) return {};
         return cookie.parse(request.headers.cookie);
