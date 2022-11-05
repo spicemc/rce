@@ -772,10 +772,9 @@ describe(``, () => {
     expect.assertions(2);
     try {
       const response = await axios.get('/posts-after/?from=InvalidDate');
-    } catch (error) {
-      const err = error as AxiosError;
-      expect(err.response?.status).toEqual(HttpStatusCodes.BAD_REQUEST);
-      expect(err.response?.data.name).toEqual('ParamNormalizationError');
+    } catch (error: any) {
+      expect(error.response?.status).toEqual(HttpStatusCodes.BAD_REQUEST);
+      expect(error.response?.data.name).toEqual('ParamNormalizationError');
     }
   });
 
