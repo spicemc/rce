@@ -505,7 +505,7 @@ describe(``, () => {
     expect.assertions(1);
     try {
       await axios.get('/not-use-session');
-    } catch (error) {
+    } catch (error: any) {
       const err = error as AxiosError;
       expect(err.response?.status).toEqual(HttpStatusCodes.INTERNAL_SERVER_ERROR);
     }
@@ -518,10 +518,14 @@ describe(``, () => {
     expect(response.headers['content-type']).toEqual('text/html; charset=utf-8');
     expect(response.data).toEqual('<html><body>@Session</body></html>');
 
+    const responseCookie = (response.headers['set-cookie'] && response.headers['set-cookie'][0]) ? 
+      response.headers['set-cookie'][0] : 
+      '';
+
     const response1 = await axios.get('/session', {
       withCredentials: true,
       headers: {
-        cookie: response.headers['set-cookie'][0],
+        cookie: responseCookie,
       },
     });
     expect(response1.status).toEqual(HttpStatusCodes.OK);
@@ -748,14 +752,14 @@ describe(``, () => {
 
     try {
       response = await axios.get('/photos-with-required?');
-    } catch (error) {
+    } catch (error: any) {
       const err = error as AxiosError;
       expect(err.response?.status).toEqual(HttpStatusCodes.BAD_REQUEST);
     }
 
     try {
       response = await axios.get('/photos-with-required?limit');
-    } catch (error) {
+    } catch (error: any) {
       const err = error as AxiosError;
       expect(err.response?.status).toEqual(HttpStatusCodes.BAD_REQUEST);
     }
@@ -821,7 +825,7 @@ describe(``, () => {
           filter: '',
         },
       });
-    } catch (error) {
+    } catch (error: any) {
       const err = error as AxiosError;
       expect(err.response?.status).toEqual(HttpStatusCodes.BAD_REQUEST);
     }
@@ -831,7 +835,7 @@ describe(``, () => {
     expect.assertions(1);
     try {
       await axios.get('/posts-with-required');
-    } catch (error) {
+    } catch (error: any) {
       const err = error as AxiosError;
       expect(err.response?.status).toEqual(HttpStatusCodes.BAD_REQUEST);
     }
@@ -878,7 +882,7 @@ describe(``, () => {
 
     try {
       response = await axios.get('questions-with-required');
-    } catch (error) {
+    } catch (error: any) {
       const err = error as AxiosError;
       expect(err.response?.status).toEqual(HttpStatusCodes.BAD_REQUEST);
     }
@@ -926,7 +930,7 @@ describe(``, () => {
           'Content-type': 'text/plain',
         },
       });
-    } catch (error) {
+    } catch (error: any) {
       const err = error as AxiosError;
       expect(err.response?.status).toEqual(HttpStatusCodes.BAD_REQUEST);
     }
@@ -937,7 +941,7 @@ describe(``, () => {
           'Content-type': 'text/plain',
         },
       });
-    } catch (error) {
+    } catch (error: any) {
       const err = error as AxiosError;
       expect(err.response?.status).toEqual(HttpStatusCodes.BAD_REQUEST);
     }
@@ -959,7 +963,7 @@ describe(``, () => {
 
     try {
       response = await axios.post('posts-with-required');
-    } catch (error) {
+    } catch (error: any) {
       const err = error as AxiosError;
       expect(err.response?.status).toEqual(HttpStatusCodes.BAD_REQUEST);
     }
@@ -981,14 +985,14 @@ describe(``, () => {
 
     try {
       response = await axios.post('/users-with-required');
-    } catch (error) {
+    } catch (error: any) {
       const err = error as AxiosError;
       expect(err.response?.status).toEqual(HttpStatusCodes.BAD_REQUEST);
     }
 
     try {
       response = await axios.post('/users-with-required', { name: '', age: 27, isActive: false });
-    } catch (error) {
+    } catch (error: any) {
       const err = error as AxiosError;
       expect(err.response?.status).toEqual(HttpStatusCodes.BAD_REQUEST);
     }
@@ -998,14 +1002,14 @@ describe(``, () => {
 
     try {
       response = await axios.post('/users-with-required', { name: 'Johny', age: undefined, isActive: false });
-    } catch (error) {
+    } catch (error: any) {
       const err = error as AxiosError;
       expect(err.response?.status).toEqual(HttpStatusCodes.BAD_REQUEST);
     }
 
     try {
       response = await axios.post('/users-with-required', { name: 'Johny', age: 27, isActive: undefined });
-    } catch (error) {
+    } catch (error: any) {
       const err = error as AxiosError;
       expect(err.response?.status).toEqual(HttpStatusCodes.BAD_REQUEST);
     }
@@ -1088,7 +1092,7 @@ describe(``, () => {
       const response = await axios.post('/file-with-limit', form, {
         headers: form.getHeaders(),
       });
-    } catch (error) {
+    } catch (error: any) {
       const err = error as AxiosError;
       expect(err.response?.status).toEqual(HttpStatusCodes.INTERNAL_SERVER_ERROR);
     }
@@ -1110,7 +1114,7 @@ describe(``, () => {
       response = await axios.post('/file-with-required', undefined, {
         headers: form.getHeaders(),
       });
-    } catch (error) {
+    } catch (error: any) {
       const err = error as AxiosError;
       expect(err.response?.status).toEqual(HttpStatusCodes.BAD_REQUEST);
     }
@@ -1139,7 +1143,7 @@ describe(``, () => {
       const response = await axios.post('/photos-with-limit', form, {
         headers: form.getHeaders(),
       });
-    } catch (error) {
+    } catch (error: any) {
       const err = error as AxiosError;
       expect(err.response?.status).toEqual(HttpStatusCodes.INTERNAL_SERVER_ERROR);
     }
@@ -1153,7 +1157,7 @@ describe(``, () => {
       const response = await axios.post('/photos-with-required', undefined, {
         headers: form.getHeaders(),
       });
-    } catch (error) {
+    } catch (error: any) {
       const err = error as AxiosError;
       expect(err.response?.status).toEqual(HttpStatusCodes.INTERNAL_SERVER_ERROR);
     }

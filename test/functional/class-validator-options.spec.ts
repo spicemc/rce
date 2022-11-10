@@ -121,7 +121,7 @@ describe(``, () => {
         expressServer = createExpressServer(options).listen(3001, done);
       });
 
-      afterEach(done => {
+      afterEach((done: DoneCallback) => {
         expressServer.close(done);
       });
 
@@ -168,7 +168,7 @@ describe(``, () => {
         expressServer = createExpressServer(options).listen(3001, done);
       });
 
-      afterEach(done => {
+      afterEach((done: DoneCallback) => {
         expressServer.close(done);
       });
 
