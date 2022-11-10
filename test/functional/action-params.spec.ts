@@ -518,9 +518,8 @@ describe(``, () => {
     expect(response.headers['content-type']).toEqual('text/html; charset=utf-8');
     expect(response.data).toEqual('<html><body>@Session</body></html>');
 
-    const responseCookie = (response.headers['set-cookie'] && response.headers['set-cookie'][0]) ? 
-      response.headers['set-cookie'][0] : 
-      '';
+    const responseCookie =
+      response.headers['set-cookie'] && response.headers['set-cookie'][0] ? response.headers['set-cookie'][0] : '';
 
     const response1 = await axios.get('/session', {
       withCredentials: true,
