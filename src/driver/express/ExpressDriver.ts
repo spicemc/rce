@@ -11,7 +11,7 @@ import { AuthorizationCheckerNotDefinedError } from '../../error/AuthorizationCh
 import { isPromiseLike } from '../../util/isPromiseLike';
 import { getFromContainer } from '../../container';
 import { AuthorizationRequiredError } from '../../error/AuthorizationRequiredError';
-import { NotFoundError } from '../../index';
+import { NotFoundError, RoutingControllersOptions } from '../../index';
 import { Callable } from '../../types/Types';
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
@@ -55,7 +55,7 @@ export class ExpressDriver extends BaseDriver {
   /**
    * Registers middleware that run before controller actions.
    */
-  registerMiddleware(middleware: MiddlewareMetadata): void {
+  registerMiddleware(middleware: MiddlewareMetadata, options: RoutingControllersOptions): void {
     let middlewareWrapper;
 
     // if its an error handler then register it with proper signature in express
@@ -89,7 +89,7 @@ export class ExpressDriver extends BaseDriver {
         writable: true,
       });
 
-      this.express.use(middlewareWrapper);
+      this.express.use(options.routePrefix || '/', middlewareWrapper);
     }
   }
 
