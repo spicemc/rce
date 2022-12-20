@@ -155,12 +155,8 @@ describe('ActionParameterHandler', () => {
         error = e;
       }
 
-      const nodeVersion: number = parseInt(process.versions.node.split('.')[0]);
-      if (nodeVersion < 16) {
-        expect(error?.toString()).to.be.eq("TypeError: Cannot read property 'uuid' of undefined");
-      } else {
-        expect(error?.toString()).to.be.eq("TypeError: Cannot read properties of undefined (reading 'uuid')");
-      }
+      expect(error.toString()).to.contain('TypeError: Cannot read');
+      expect(error.toString()).to.contain("'uuid'");
     });
 
     it('handle - throws error if the parameter is required, type file provided', async () => {
