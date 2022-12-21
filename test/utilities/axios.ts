@@ -1,9 +1,10 @@
 import Axios, { AxiosInstance, CreateAxiosDefaults } from 'axios';
+import { Agent } from 'http';
 
-export const axios: AxiosInstance = Axios.create({
-  baseURL: 'http://localhost:3001/',
-});
+export const axios: AxiosInstance = getAxiosInstance({ baseURL: 'http://localhost:3001/' });
 
 export function getAxiosInstance(config?: CreateAxiosDefaults): AxiosInstance {
-  return Axios.create(config);
+  const axiosConfig = { ...config };
+  axiosConfig.httpAgent = new Agent({ keepAlive: false }); // workaround
+  return Axios.create(axiosConfig);
 }
