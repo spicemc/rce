@@ -1,5 +1,11 @@
 # Changelog and release notes
 
+### 1.0.5
+
+#### Fixes
+
+- Fixed registered middlewares will respect the route prefix
+
 ### 0.9.0
 
 #### Features
