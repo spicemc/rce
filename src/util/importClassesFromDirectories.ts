@@ -18,8 +18,9 @@ export function importClassesFromDirectories(directories: string[], formats = ['
   };
 
   const allFiles = directories.reduce((allDirs, dir) => {
+    // Replace \ with /
     // eslint-disable-next-line @typescript-eslint/no-var-requires
-    return allDirs.concat(require('glob').sync(path.normalize(dir)));
+    return allDirs.concat(require('glob').sync(path.normalize(dir).replace(/\\/g, '/')));
   }, [] as string[]);
 
   const dirs = allFiles
