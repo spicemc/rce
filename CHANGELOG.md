@@ -1,5 +1,11 @@
 # Changelog and release notes
 
+### 1.0.6
+
+- class-validator updated to 0.14.0 and new enabled property `forbidUnknownValues` defaults to false, but can be overriden
+- import classes glob pattern for windows fixed
+- small readme fixes
+
 ### 1.0.5
 
 #### Fixes
