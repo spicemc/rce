@@ -102,11 +102,11 @@
 
    **b. 在 _koa 2_ 中使用 routing-controllers，需要安装以下依赖：**
 
-   `npm install koa koa-router koa-bodyparser koa-multer`
+   `npm install koa @koa/router koa-bodyparser @koa/multer`
 
    可选装它们的类型声明：
 
-   `npm install -D @types/koa @types/koa-router @types/koa-bodyparser`
+   `npm install -D @types/koa @types/koa-bodyparser`
 
 4. 可选依赖
 
@@ -770,7 +770,7 @@ app.listen(3000);
 ```
 
 使用 cors 需要先安装对应模块。
-express 用户需要 `npm i cors`，Koa 用户需要 `npm i kcors`。
+express 用户需要 `npm i cors`，Koa 用户需要 `npm i @koa/cors`。
 可以如下例进行配置：
 
 ```typescript

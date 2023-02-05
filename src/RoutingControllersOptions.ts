@@ -10,7 +10,7 @@ import { Newable } from './types/Types';
 export interface RoutingControllersOptions {
   /**
    * Indicates if cors are enabled.
-   * This requires installation of additional module (cors for express and kcors for koa).
+   * This requires installation of additional module (cors for express and @koa/cors for koa).
    */
   cors?: boolean | Record<string, unknown>;
 
