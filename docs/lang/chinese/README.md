@@ -766,7 +766,7 @@ app.listen(3000);
 ```
 
 使用 cors 需要先安装对应模块。
-express 用户需要 `npm i cors`，Koa 用户需要 `npm i kcors`。
+express 用户需要 `npm i cors`，Koa 用户需要 `npm i @koa/cors`。
 可以如下例进行配置：
 
 ```typescript
