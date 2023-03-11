@@ -1,5 +1,9 @@
 # Changelog and release notes
 
+### next
+
+- multer updated to `1.4.5-lts.1`
+
 ### 1.0.6
 
 - class-validator updated to 0.14.0 and new enabled property `forbidUnknownValues` defaults to false, but can be overriden
