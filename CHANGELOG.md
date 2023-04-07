@@ -1,6 +1,6 @@
 # Changelog and release notes
 
-### next
+### 1.0.7
 
 - multer updated to `1.4.5-lts.1`
 - Upgraded to TypeScript 5.0.3 - @Body decorator type fixed
