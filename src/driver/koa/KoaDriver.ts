@@ -198,10 +198,10 @@ export class KoaDriver extends BaseDriver {
         return context.query;
 
       case 'file':
-        return actionOptions.context.req.file;
+        return actionOptions.context.request.file;
 
       case 'files':
-        return actionOptions.context.req.files;
+        return actionOptions.context.request.files;
 
       case 'header':
         return context.headers[paramName.toLowerCase()];
