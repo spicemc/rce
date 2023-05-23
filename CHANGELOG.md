@@ -1,5 +1,13 @@
 # Changelog and release notes
 
+### 1.0.8
+
+- Updated packages
+- Updated TypeScript to 5.0.4
+- Fixed metadata storage. createActions should not mutate actions.
+- Fixed koa router trailing slash
+- Fixed koa uploaded file decorators
+
 ### 1.0.7
 
 - multer updated to `1.4.5-lts.1`
