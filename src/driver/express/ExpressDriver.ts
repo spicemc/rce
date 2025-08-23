@@ -181,9 +181,32 @@ export class ExpressDriver extends BaseDriver {
       }
     };
 
+    const normalizeRoute = (route: string | RegExp): string | RegExp => {
+      if (typeof route === "string") {
+        // Handle old "catch-all"-routes
+        if (route === "*" || route === "(.*)") {
+          // return "/*";
+          return "/:rest*";
+        }
+
+        // path-to-regexp 6.x allows only :, / und normal chars
+        // escape other chars
+        return route
+          .replace(/\(/g, '\\(')
+          .replace(/\)/g, '\\)')
+          .replace(/\[/g, '\\[')
+          .replace(/\]/g, '\\]')
+          .replace(/\?/g, '\\?')
+          .replace(/\+/g, '\\+')
+          .replace(/\./g, '\\.');
+      }
+
+      throw new Error(`ExpressDriver does not support RegExp routes. Use string routes instead like '/users/:id'.`);
+    };
+
     // finally register action in express
     this.express[actionMetadata.type.toLowerCase()](
-      ...[route, routeGuard, ...beforeMiddlewares, ...defaultMiddlewares, routeHandler, ...afterMiddlewares],
+      ...[normalizeRoute(route), routeGuard, ...beforeMiddlewares, ...defaultMiddlewares, routeHandler, ...afterMiddlewares],
     );
   }
 

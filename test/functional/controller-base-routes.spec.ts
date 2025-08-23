@@ -25,7 +25,8 @@ describe(``, () => {
           return '<html><body>One post</body></html>';
         }
 
-        @Get(/\/categories\/(\d+)/)
+        // @Get(/\/categories\/(\d+)/)
+        @Get('/categories/:id(\\d+)')
         getCategoryById(): string {
           return '<html><body>One post category</body></html>';
         }
@@ -36,14 +37,31 @@ describe(``, () => {
         }
       }
 
-      expressServer = createExpressServer().listen(3001, done);
+      expressServer = createExpressServer({
+        controllers: [PostController],
+      }).listen(3001, done);
+
+      // function listRoutes(app: any) {
+      //   if (!app._router) {
+      //     console.log("No registered routes");
+      //     return;
+      //   }
+
+      //   app._router.stack.forEach((layer: any) => {
+      //     if (layer.route) {
+      //       const methods = Object.keys(layer.route.methods).map(m => m.toUpperCase()).join(', ');
+      //       console.log(`${methods.padEnd(10)} ${layer.route.path}`);
+      //     }
+      //   });
+      // }
+      // const app = (expressServer as any).listeners("request")[0];
     });
 
     afterEach((done: DoneCallback) => {
       expressServer.close(done);
     });
 
-    it('get should respond with proper status code, headers and body content', async () => {
+    it('1. get should respond with proper status code, headers and body content', async () => {
       expect.assertions(3);
       const response = await axios.get('/posts');
       expect(response.status).toEqual(HttpStatusCodes.OK);
