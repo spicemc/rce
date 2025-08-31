@@ -90,24 +90,22 @@ export interface RoutingControllersOptions {
    */
   express?: {
     /**
-     * Set the express query parser type or disable it. 
+     * Set the express query parser type or disable it.
      * https://expressjs.com/en/5x/api.html#app.settings.table
-     * 
+     *
      * 'simple' - uses the simple query parser (http://nodejs.org/api/querystring.html)
      * 'extended' - uses the qs module for parsing (https://www.npmjs.org/package/qs)
      * Callable - a custom query parser function
      * false - to disable query parsing altogether
-     * 
+     *
      * Note: The default express setting is 'simple'.
      * In order to support complex query params (like arrays) out of the box,
      * this option is set to 'extended' by default.
-     * 
+     *
      * Default: 'extended'
-     * 
-     * @see
      */
     queryParser?: 'simple' | 'extended' | Callable | false;
-  }
+  };
 
   /**
    * Default settings

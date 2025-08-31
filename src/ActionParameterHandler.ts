@@ -205,6 +205,7 @@ export class ActionParameterHandler<T extends BaseDriver> {
       } else {
         try {
           return JSON.parse(value);
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
         } catch (error) {
           throw new ParameterParseJsonError(paramMetadata.name ?? '', value);
         }

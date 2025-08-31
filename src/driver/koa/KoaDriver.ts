@@ -27,7 +27,10 @@ export class KoaDriver extends BaseDriver {
   // Constructor
   // -------------------------------------------------------------------------
 
-  constructor(public koa?: any, public router?: any) {
+  constructor(
+    public koa?: any,
+    public router?: any,
+  ) {
     super();
     this.loadKoa();
     this.loadRouter();
@@ -41,6 +44,7 @@ export class KoaDriver extends BaseDriver {
   /**
    * Initializes the things driver needs before routes and middleware registration.
    */
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   initialize(options: RoutingControllersOptions) {
     // eslint-disable-next-line @typescript-eslint/no-var-requires
     const bodyParser = require('koa-bodyparser');
@@ -371,6 +375,7 @@ export class KoaDriver extends BaseDriver {
         try {
           // eslint-disable-next-line @typescript-eslint/no-var-requires
           this.koa = new (require('koa'))();
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
         } catch (e) {
           throw new Error('koa package was not found installed. Try to install it: npm install koa@next --save');
         }
@@ -389,6 +394,7 @@ export class KoaDriver extends BaseDriver {
         try {
           // eslint-disable-next-line @typescript-eslint/no-var-requires
           this.router = new (require('@koa/router'))();
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
         } catch (e) {
           throw new Error(
             '@koa/router package was not found installed. Try to install it: npm install @koa/router --save',
@@ -406,6 +412,7 @@ export class KoaDriver extends BaseDriver {
   private loadMulter() {
     try {
       return require('@koa/multer');
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (e) {
       throw new Error('@koa/multer package was not found installed. Try to install it: npm install @koa/multer --save');
     }

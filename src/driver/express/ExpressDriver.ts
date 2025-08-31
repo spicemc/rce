@@ -453,6 +453,7 @@ export class ExpressDriver extends BaseDriver {
         try {
           // eslint-disable-next-line @typescript-eslint/no-var-requires
           this.express = require('express')();
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
         } catch (e) {
           throw new Error('express package was not found installed. Try to install it: npm install express --save');
         }
@@ -468,6 +469,7 @@ export class ExpressDriver extends BaseDriver {
   protected loadBodyParser() {
     try {
       return require('body-parser');
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (e) {
       throw new Error('body-parser package was not found installed. Try to install it: npm install body-parser --save');
     }
@@ -479,6 +481,7 @@ export class ExpressDriver extends BaseDriver {
   protected loadMulter() {
     try {
       return require('multer');
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (e) {
       throw new Error('multer package was not found installed. Try to install it: npm install multer --save');
     }
