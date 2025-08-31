@@ -41,7 +41,7 @@ export class ExpressDriver extends BaseDriver {
    * Initializes the things driver needs before routes and middlewares registration.
    */
   initialize(options: RoutingControllersOptions) {
-    this.app.set('query parser', options.express?.queryParser ?? 'extended');
+    this.express.set('query parser', options.express?.queryParser ?? 'extended');
 
     if (this.cors) {
       // eslint-disable-next-line @typescript-eslint/no-var-requires

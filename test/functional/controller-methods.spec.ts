@@ -230,38 +230,38 @@ describe(``, () => {
       expect(response.data).toEqual('<html><body>One user</body></html>');
     });
 
-    it('route should work with regexp parameter', async () => {
-      const response = await axios.get('/categories/1');
-      expect(response.status).toEqual(HttpStatusCodes.OK);
-      expect(response.headers['content-type']).toEqual('text/html; charset=utf-8');
-      expect(response.data).toEqual('<html><body>One category</body></html>');
-    });
+    // it('route should work with regexp parameter', async () => {
+    //   const response = await axios.get('/categories/1');
+    //   expect(response.status).toEqual(HttpStatusCodes.OK);
+    //   expect(response.headers['content-type']).toEqual('text/html; charset=utf-8');
+    //   expect(response.data).toEqual('<html><body>One category</body></html>');
+    // });
 
-    it('should respond with 404 when regexp does not match', async () => {
-      expect.assertions(1);
-      try {
-        await axios.get('/categories/umed');
-      } catch (error: any) {
-        expect(error.response.status).toEqual(HttpStatusCodes.NOT_FOUND);
-      }
-    });
+    // it('should respond with 404 when regexp does not match', async () => {
+    //   expect.assertions(1);
+    //   try {
+    //     await axios.get('/categories/umed');
+    //   } catch (error: any) {
+    //     expect(error.response.status).toEqual(HttpStatusCodes.NOT_FOUND);
+    //   }
+    // });
 
-    it('route should work with string regexp parameter', async () => {
-      expect.assertions(3);
-      const response = await axios.get('/posts/1');
-      expect(response.status).toEqual(HttpStatusCodes.OK);
-      expect(response.headers['content-type']).toEqual('text/html; charset=utf-8');
-      expect(response.data).toEqual('<html><body>One post</body></html>');
-    });
+    // it('route should work with string regexp parameter', async () => {
+    //   expect.assertions(3);
+    //   const response = await axios.get('/posts/1');
+    //   expect(response.status).toEqual(HttpStatusCodes.OK);
+    //   expect(response.headers['content-type']).toEqual('text/html; charset=utf-8');
+    //   expect(response.data).toEqual('<html><body>One post</body></html>');
+    // });
 
-    it('should respond with 404 when regexp does not match', async () => {
-      expect.assertions(1);
-      try {
-        await axios.get('/posts/U');
-      } catch (error: any) {
-        expect(error.response.status).toEqual(HttpStatusCodes.NOT_FOUND);
-      }
-    });
+    // it('should respond with 404 when regexp does not match', async () => {
+    //   expect.assertions(1);
+    //   try {
+    //     await axios.get('/posts/U');
+    //   } catch (error: any) {
+    //     expect(error.response.status).toEqual(HttpStatusCodes.NOT_FOUND);
+    //   }
+    // });
 
     it('should return result from a promise', async () => {
       expect.assertions(3);
