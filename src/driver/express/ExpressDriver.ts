@@ -40,7 +40,9 @@ export class ExpressDriver extends BaseDriver {
   /**
    * Initializes the things driver needs before routes and middlewares registration.
    */
-  initialize() {
+  initialize(options: RoutingControllersOptions) {
+    this.app.set('query parser', options.express?.queryParser ?? 'extended');
+
     if (this.cors) {
       // eslint-disable-next-line @typescript-eslint/no-var-requires
       const cors = require('cors');
@@ -181,32 +183,9 @@ export class ExpressDriver extends BaseDriver {
       }
     };
 
-    const normalizeRoute = (route: string | RegExp): string | RegExp => {
-      if (typeof route === "string") {
-        // Handle old "catch-all"-routes
-        if (route === "*" || route === "(.*)") {
-          // return "/*";
-          return "/:rest*";
-        }
-
-        // path-to-regexp 6.x allows only :, / und normal chars
-        // escape other chars
-        return route
-          .replace(/\(/g, '\\(')
-          .replace(/\)/g, '\\)')
-          .replace(/\[/g, '\\[')
-          .replace(/\]/g, '\\]')
-          .replace(/\?/g, '\\?')
-          .replace(/\+/g, '\\+')
-          .replace(/\./g, '\\.');
-      }
-
-      throw new Error(`ExpressDriver does not support RegExp routes. Use string routes instead like '/users/:id'.`);
-    };
-
     // finally register action in express
     this.express[actionMetadata.type.toLowerCase()](
-      ...[normalizeRoute(route), routeGuard, ...beforeMiddlewares, ...defaultMiddlewares, routeHandler, ...afterMiddlewares],
+      ...[route, routeGuard, ...beforeMiddlewares, ...defaultMiddlewares, routeHandler, ...afterMiddlewares],
     );
   }
 

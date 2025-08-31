@@ -28,39 +28,39 @@ export abstract class BaseDriver {
   /**
    * Indicates if class-transformer should be used or not.
    */
-  useClassTransformer: boolean;
+  useClassTransformer?: boolean | undefined;
 
   /**
    * Indicates if class-validator should be used or not.
    */
-  enableValidation: boolean;
+  enableValidation?: boolean | undefined;
 
   /**
    * Global class transformer options passed to class-transformer during instanceToPlain operation.
    * This operation is being executed when server returns response to user.
    */
-  classToPlainTransformOptions: ClassTransformOptions;
+  classToPlainTransformOptions?: ClassTransformOptions | undefined;
 
   /**
    * Global class-validator options passed during validate operation.
    */
-  validationOptions: ValidatorOptions;
+  validationOptions?: ValidatorOptions | undefined;
 
   /**
    * Global class transformer options passed to class-transformer during plainToClass operation.
    * This operation is being executed when parsing user parameters.
    */
-  plainToClassTransformOptions: ClassTransformOptions;
+  plainToClassTransformOptions?: ClassTransformOptions | undefined;
 
   /**
    * Indicates if default routing-controllers error handler should be used or not.
    */
-  isDefaultErrorHandlingEnabled: boolean;
+  isDefaultErrorHandlingEnabled?: boolean | undefined;
 
   /**
    * Indicates if routing-controllers should operate in development mode.
    */
-  developmentMode: boolean;
+  developmentMode?: boolean | undefined;
 
   /**
    * Global application prefix.
@@ -76,7 +76,7 @@ export abstract class BaseDriver {
   /**
    * Map of error overrides.
    */
-  errorOverridingMap: { [key: string]: any };
+  errorOverridingMap?: { [key: string]: any } | undefined;
 
   /**
    * Special function used to check user authorization roles per request.
@@ -138,7 +138,7 @@ export abstract class BaseDriver {
       if (this.errorOverridingMap)
         Object.keys(this.errorOverridingMap)
           .filter(key => name === key)
-          .forEach(key => (processedError = this.merge(processedError, this.errorOverridingMap[key])));
+          .forEach(key => (processedError = this.merge(processedError, this.errorOverridingMap![key])));
 
       return Object.keys(processedError).length > 0 ? processedError : undefined;
     }
@@ -177,7 +177,7 @@ export abstract class BaseDriver {
   /**
    * Initializes the things driver needs before routes and middleware registration.
    */
-  abstract initialize(): void;
+  abstract initialize(options: RoutingControllersOptions): void;
 
   /**
    * Registers given middleware.

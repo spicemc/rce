@@ -69,12 +69,13 @@ describe(``, () => {
           return '<html><body>One user</body></html>';
         }
 
-        @Get(/\/categories\/[\d+]/)
+        // @Get(/\/categories\/[\d+]/)
+        @Get('/categories/:id')
         getCategoryById(): string {
           return '<html><body>One category</body></html>';
         }
 
-        @Get('/posts/:id(\\d+)')
+        @Get('/posts/:id')
         getPostById(): string {
           return '<html><body>One post</body></html>';
         }

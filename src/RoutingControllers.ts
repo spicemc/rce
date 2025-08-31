@@ -50,8 +50,8 @@ export class RoutingControllers<T extends BaseDriver> {
   /**
    * Initializes the things driver needs before routes and middleware registration.
    */
-  initialize(): this {
-    this.driver.initialize();
+  initialize(options: RoutingControllersOptions): this {
+    this.driver.initialize(options);
     return this;
   }
 

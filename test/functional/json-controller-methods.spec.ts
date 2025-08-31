@@ -77,14 +77,15 @@ describe(``, () => {
             name: 'Umed',
           };
         }
-        @Get(/\/categories\/[\d+]/)
+        // @Get(/\/categories\/[\d+]/)
+        @Get('/categories/:id')
         getCategoryById() {
           return {
             id: 1,
             name: 'People',
           };
         }
-        @Get('/posts/:id(\\d+)')
+        @Get('/posts/:id')
         getPostById() {
           return {
             id: 1,

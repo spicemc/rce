@@ -11,7 +11,7 @@ import { isPromiseLike } from '../../util/isPromiseLike';
 import { getFromContainer } from '../../container';
 import { RoleChecker } from '../../RoleChecker';
 import { AuthorizationRequiredError } from '../../error/AuthorizationRequiredError';
-import { HttpError, NotFoundError } from '../../index';
+import { HttpError, NotFoundError, RoutingControllersOptions } from '../../index';
 import { Callable } from '../../types/Types';
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
@@ -41,7 +41,7 @@ export class KoaDriver extends BaseDriver {
   /**
    * Initializes the things driver needs before routes and middleware registration.
    */
-  initialize() {
+  initialize(options: RoutingControllersOptions) {
     // eslint-disable-next-line @typescript-eslint/no-var-requires
     const bodyParser = require('koa-bodyparser');
     this.koa.use(bodyParser());
