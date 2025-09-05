@@ -832,10 +832,10 @@ app.listen(3000);
 
 This setting is **optional**. You can set the express query parser type or disable it. Available options:
 
-- `'simple'`   - uses the simple query parser. [simple parser](http://nodejs.org/api/querystring.html)
+- `'simple'` - uses the simple query parser. [simple parser](http://nodejs.org/api/querystring.html)
 - `'extended'` - uses the qs module for parsing. [qs parser](https://www.npmjs.org/package/qs)
-- `Function`   - a custom query parser function
-- `false`      - to disable query parsing
+- `Function` - a custom query parser function
+- `false` - to disable query parsing
 
 The default [express setting](https://expressjs.com/en/5x/api.html#app.settings.table) is `'simple'`.
 In order to support complex query params (like arrays) out of the box,
