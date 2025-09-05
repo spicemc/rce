@@ -14,9 +14,8 @@ import { AuthorizationRequiredError } from '../../error/AuthorizationRequiredErr
 import { HttpError, NotFoundError, RoutingControllersOptions } from '../../index';
 import { Callable } from '../../types/Types';
 
- 
 const cookie = require('cookie');
- 
+
 const templateUrl = require('template-url');
 
 /**
@@ -44,13 +43,11 @@ export class KoaDriver extends BaseDriver {
   /**
    * Initializes the things driver needs before routes and middleware registration.
    */
-   
+
   initialize(options: RoutingControllersOptions) {
-     
     const bodyParser = require('koa-bodyparser');
     this.koa.use(bodyParser());
     if (this.cors) {
-       
       const cors = require('@koa/cors');
       if (this.cors === true) {
         this.koa.use(cors());
@@ -257,7 +254,6 @@ export class KoaDriver extends BaseDriver {
       // if template is set then render it // TODO: not working in koa
       const renderOptions = result && result instanceof Object ? result : {};
 
-       
       this.koa.use(async function (ctx: any, next: any) {
         await ctx.render(action.renderedTemplate, renderOptions);
       });
@@ -332,7 +328,6 @@ export class KoaDriver extends BaseDriver {
         return resolve();
       }
       return reject(error instanceof Error ? error : new Error(String(error)));
-
     });
   }
 
@@ -374,7 +369,6 @@ export class KoaDriver extends BaseDriver {
     if (require) {
       if (!this.koa) {
         try {
-           
           this.koa = new (require('koa'))();
           // eslint-disable-next-line @typescript-eslint/no-unused-vars
         } catch (e) {
@@ -393,7 +387,6 @@ export class KoaDriver extends BaseDriver {
     if (require) {
       if (!this.router) {
         try {
-           
           this.router = new (require('@koa/router'))();
           // eslint-disable-next-line @typescript-eslint/no-unused-vars
         } catch (e) {

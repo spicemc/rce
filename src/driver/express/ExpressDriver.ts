@@ -14,9 +14,8 @@ import { AuthorizationRequiredError } from '../../error/AuthorizationRequiredErr
 import { NotFoundError, RoutingControllersOptions } from '../../index';
 import { Callable } from '../../types/Types';
 
- 
 const cookie = require('cookie');
- 
+
 const templateUrl = require('template-url');
 
 /**
@@ -44,7 +43,6 @@ export class ExpressDriver extends BaseDriver {
     this.express.set('query parser', options.express?.queryParser ?? 'extended');
 
     if (this.cors) {
-       
       const cors = require('cors');
       if (this.cors === true) {
         this.express.use(cors());
@@ -192,7 +190,7 @@ export class ExpressDriver extends BaseDriver {
 
   /**
    * Registers all routes in the framework.
-   */   
+   */
   registerRoutes() {}
 
   /**
@@ -451,7 +449,6 @@ export class ExpressDriver extends BaseDriver {
     if (require) {
       if (!this.express) {
         try {
-           
           this.express = require('express')();
           // eslint-disable-next-line @typescript-eslint/no-unused-vars
         } catch (e) {

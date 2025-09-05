@@ -92,7 +92,7 @@ export abstract class BaseDriver {
   // -------------------------------------------------------------------------
   // Protected Methods
   // -------------------------------------------------------------------------
-   
+
   protected transformResult(result: any, action: ActionMetadata, options: Action): any {
     // check if we need to transform result
     const shouldTransform =
