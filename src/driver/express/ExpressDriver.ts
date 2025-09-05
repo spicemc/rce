@@ -14,9 +14,9 @@ import { AuthorizationRequiredError } from '../../error/AuthorizationRequiredErr
 import { NotFoundError, RoutingControllersOptions } from '../../index';
 import { Callable } from '../../types/Types';
 
-// eslint-disable-next-line @typescript-eslint/no-var-requires
+ 
 const cookie = require('cookie');
-// eslint-disable-next-line @typescript-eslint/no-var-requires
+ 
 const templateUrl = require('template-url');
 
 /**
@@ -44,7 +44,7 @@ export class ExpressDriver extends BaseDriver {
     this.express.set('query parser', options.express?.queryParser ?? 'extended');
 
     if (this.cors) {
-      // eslint-disable-next-line @typescript-eslint/no-var-requires
+       
       const cors = require('cors');
       if (this.cors === true) {
         this.express.use(cors());
@@ -192,8 +192,7 @@ export class ExpressDriver extends BaseDriver {
 
   /**
    * Registers all routes in the framework.
-   */
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
+   */   
   registerRoutes() {}
 
   /**
@@ -452,7 +451,7 @@ export class ExpressDriver extends BaseDriver {
     if (require) {
       if (!this.express) {
         try {
-          // eslint-disable-next-line @typescript-eslint/no-var-requires
+           
           this.express = require('express')();
           // eslint-disable-next-line @typescript-eslint/no-unused-vars
         } catch (e) {
@@ -463,18 +462,6 @@ export class ExpressDriver extends BaseDriver {
       throw new Error('Cannot load express. Try to install all required dependencies.');
     }
   }
-
-  /**
-   * Dynamically loads body-parser module.
-   */
-  // protected loadBodyParser() {
-  //   try {
-  //     return require('body-parser');
-  //     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  //   } catch (e) {
-  //     throw new Error('body-parser package was not found installed. Try to install it: npm install body-parser --save');
-  //   }
-  // }
 
   /**
    * Dynamically loads multer module.
