@@ -96,7 +96,7 @@ export interface RoutingControllersOptions {
      * 'simple' - uses the simple query parser (http://nodejs.org/api/querystring.html)
      * 'extended' - uses the qs module for parsing (https://www.npmjs.org/package/qs)
      * Callable - a custom query parser function
-     * false - to disable query parsing altogether
+     * false - to disable query parsing
      *
      * Note: The default express setting is 'simple'.
      * In order to support complex query params (like arrays) out of the box,
