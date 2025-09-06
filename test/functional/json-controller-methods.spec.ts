@@ -77,7 +77,6 @@ describe(``, () => {
             name: 'Umed',
           };
         }
-        // @Get(/\/categories\/[\d+]/)
         @Get('/categories/:id')
         getCategoryById() {
           return {
@@ -219,45 +218,14 @@ describe(``, () => {
       });
     });
 
-    // it('route should work with regexp parameter', async () => {
-    //   expect.assertions(3);
-    //   const response = await axios.get('/categories/1');
-    //   expect(response.status).toEqual(HttpStatusCodes.OK);
-    //   expect(response.headers).toHaveProperty('content-type', 'application/json; charset=utf-8');
-    //   expect(response.data).toEqual({
-    //     id: 1,
-    //     name: 'People',
-    //   });
-    // });
-
-    // it('should respond with 404 when regexp does not match', async () => {
-    //   expect.assertions(1);
-    //   try {
-    //     await axios.get('/categories/b1');
-    //   } catch (err: any) {
-    //     expect(err.response.status).toEqual(HttpStatusCodes.NOT_FOUND);
-    //   }
-    // });
-
-    // it('route should work with string regexp parameter', async () => {
-    //   expect.assertions(3);
-    //   const response = await axios.get('/posts/1');
-    //   expect(response.status).toEqual(HttpStatusCodes.OK);
-    //   expect(response.headers).toHaveProperty('content-type', 'application/json; charset=utf-8');
-    //   expect(response.data).toEqual({
-    //     id: 1,
-    //     title: 'About People',
-    //   });
-    // });
-
-    // it('should respond with 404 when regexp does not match', async () => {
-    //   expect.assertions(1);
-    //   try {
-    //     await axios.get('/posts/U');
-    //   } catch (err: any) {
-    //     expect(err.response.status).toEqual(HttpStatusCodes.NOT_FOUND);
-    //   }
-    // });
+    it('should respond with 404 when route does not match', async () => {
+      expect.assertions(1);
+      try {
+        await axios.get('/unknown/url');
+      } catch (err: any) {
+        expect(err.response.status).toEqual(HttpStatusCodes.NOT_FOUND);
+      }
+    });
 
     it('should return result from a promise', async () => {
       expect.assertions(3);

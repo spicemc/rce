@@ -25,13 +25,11 @@ describe(``, () => {
           return '<html><body>One post</body></html>';
         }
 
-        // @Get(/\/categories\/(\d+)/)
         @Get('/categories/:id')
         getCategoryById(): string {
           return '<html><body>One post category</body></html>';
         }
 
-        // @Get('/:postId(\\d+)/users/:userId(\\d+)')
         @Get('/:postId/users/:userId')
         getPostById(): string {
           return '<html><body>One user</body></html>';

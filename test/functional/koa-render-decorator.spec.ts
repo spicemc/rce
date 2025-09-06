@@ -48,7 +48,7 @@ describe(``, () => {
         layout: false,
         viewExt: 'html', // Auto-appended to template name
         cache: false,
-        debug: true,
+        debug: false,
       });
 
       koaServer = koaApp.listen(3001, done);
