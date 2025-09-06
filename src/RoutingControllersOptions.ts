@@ -2,7 +2,7 @@ import { ClassTransformOptions } from 'class-transformer';
 import { ValidatorOptions } from 'class-validator';
 import { AuthorizationChecker } from './AuthorizationChecker';
 import { CurrentUserChecker } from './CurrentUserChecker';
-import { Newable } from './types/Types';
+import { Newable, Callable } from './types/Types';
 
 /**
  * Routing controller initialization options.
@@ -84,6 +84,28 @@ export interface RoutingControllersOptions {
    * Special function used to get currently authorized user.
    */
   currentUserChecker?: CurrentUserChecker;
+
+  /**
+   * Express specific options.
+   */
+  express?: {
+    /**
+     * Set the express query parser type or disable it.
+     * https://expressjs.com/en/5x/api.html#app.settings.table
+     *
+     * 'simple' - uses the simple query parser (http://nodejs.org/api/querystring.html)
+     * 'extended' - uses the qs module for parsing (https://www.npmjs.org/package/qs)
+     * Callable - a custom query parser function
+     * false - to disable query parsing
+     *
+     * Note: The default express setting is 'simple'.
+     * In order to support complex query params (like arrays) out of the box,
+     * this option is set to 'extended' by default.
+     *
+     * Default: 'extended'
+     */
+    queryParser?: 'simple' | 'extended' | Callable | false;
+  };
 
   /**
    * Default settings

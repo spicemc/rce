@@ -69,12 +69,13 @@ describe(``, () => {
           return '<html><body>One user</body></html>';
         }
 
-        @Get(/\/categories\/[\d+]/)
+        // @Get(/\/categories\/[\d+]/)
+        @Get('/categories/:id')
         getCategoryById(): string {
           return '<html><body>One category</body></html>';
         }
 
-        @Get('/posts/:id(\\d+)')
+        @Get('/posts/:id')
         getPostById(): string {
           return '<html><body>One post</body></html>';
         }
@@ -229,34 +230,10 @@ describe(``, () => {
       expect(response.data).toEqual('<html><body>One user</body></html>');
     });
 
-    it('route should work with regexp parameter', async () => {
-      const response = await axios.get('/categories/1');
-      expect(response.status).toEqual(HttpStatusCodes.OK);
-      expect(response.headers['content-type']).toEqual('text/html; charset=utf-8');
-      expect(response.data).toEqual('<html><body>One category</body></html>');
-    });
-
-    it('should respond with 404 when regexp does not match', async () => {
+    it('should respond with 404 when route does not match', async () => {
       expect.assertions(1);
       try {
-        await axios.get('/categories/umed');
-      } catch (error: any) {
-        expect(error.response.status).toEqual(HttpStatusCodes.NOT_FOUND);
-      }
-    });
-
-    it('route should work with string regexp parameter', async () => {
-      expect.assertions(3);
-      const response = await axios.get('/posts/1');
-      expect(response.status).toEqual(HttpStatusCodes.OK);
-      expect(response.headers['content-type']).toEqual('text/html; charset=utf-8');
-      expect(response.data).toEqual('<html><body>One post</body></html>');
-    });
-
-    it('should respond with 404 when regexp does not match', async () => {
-      expect.assertions(1);
-      try {
-        await axios.get('/posts/U');
+        await axios.get('/unknown/route');
       } catch (error: any) {
         expect(error.response.status).toEqual(HttpStatusCodes.NOT_FOUND);
       }

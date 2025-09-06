@@ -20,30 +20,32 @@ describe(``, () => {
           return '<html><body>All posts</body></html>';
         }
 
-        @Get('/:id(\\d+)')
+        @Get('/:id')
         getUserById(): string {
           return '<html><body>One post</body></html>';
         }
 
-        @Get(/\/categories\/(\d+)/)
+        @Get('/categories/:id')
         getCategoryById(): string {
           return '<html><body>One post category</body></html>';
         }
 
-        @Get('/:postId(\\d+)/users/:userId(\\d+)')
+        @Get('/:postId/users/:userId')
         getPostById(): string {
           return '<html><body>One user</body></html>';
         }
       }
 
-      expressServer = createExpressServer().listen(3001, done);
+      expressServer = createExpressServer({
+        controllers: [PostController],
+      }).listen(3001, done);
     });
 
     afterEach((done: DoneCallback) => {
       expressServer.close(done);
     });
 
-    it('get should respond with proper status code, headers and body content', async () => {
+    it('1. get should respond with proper status code, headers and body content', async () => {
       expect.assertions(3);
       const response = await axios.get('/posts');
       expect(response.status).toEqual(HttpStatusCodes.OK);
@@ -61,7 +63,7 @@ describe(``, () => {
 
     it('get should respond with proper status code, headers and body content - 2nd pass', async () => {
       expect.assertions(3);
-      const response = await axios.get('posts/1/users/2');
+      const response = await axios.get('/posts/1/users/2');
       expect(response.status).toEqual(HttpStatusCodes.OK);
       expect(response.headers['content-type']).toEqual('text/html; charset=utf-8');
       expect(response.data).toEqual('<html><body>One user</body></html>');

@@ -42,6 +42,7 @@ You can use routing-controllers-extended with [express.js][1] or [koa.js][2].
   - [Render templates](#render-templates)
   - [Throw HTTP errors](#throw-http-errors)
   - [Enable CORS](#enable-cors)
+  - [Set express query parser](#set-express-query-parser)
   - [Default settings](#default-settings)
   - [Selectively disabling request/response transform](#selectively-disable-requestresponse-transforming)
 - [Using middlewares](#using-middlewares)
@@ -92,11 +93,11 @@ import 'reflect-metadata';
 
    **a. If you want to use routing-controllers-extended with _express.js_, then install it and all required dependencies:**
 
-   `npm install express body-parser multer`
+   `npm install express multer@1.4.5-lts.1`
 
    Optionally you can also install their typings:
 
-   `npm install -D @types/express @types/body-parser @types/multer`
+   `npm install -D @types/express @types/multer`
 
    **b. If you want to use routing-controllers-extended with _koa 2_, then install it and all required dependencies:**
 
@@ -727,8 +728,10 @@ getOne() {
 ```
 
 To use rendering ability make sure to configure express / koa properly.
-To use rendering ability with Koa you will need to use a rendering 3rd party such as [koa-views](https://github.com/queckezz/koa-views/),
-koa-views is the only render middleware that has been tested.
+To use rendering ability with Koa you will need to use a rendering 3rd party such as [@koa/ejs](https://github.com/koajs/ejs),
+@koa/ejs is the only render middleware that has been tested.
+
+See [the koa render test file](./test/functional/koa-render-decorator.spec.ts) as an example.
 
 #### Throw HTTP errors
 
@@ -818,6 +821,33 @@ import { UserController } from './UserController';
 const app = createExpressServer({
   cors: {
     // options from cors documentation
+  },
+  controllers: [UserController],
+});
+
+app.listen(3000);
+```
+
+#### Set express query parser
+
+This setting is **optional**. You can set the express query parser type or disable it. Available options:
+
+- `'simple'` - uses the simple query parser. [simple parser](http://nodejs.org/api/querystring.html)
+- `'extended'` - uses the qs module for parsing. [qs parser](https://www.npmjs.org/package/qs)
+- `Function` - a custom query parser function
+- `false` - to disable query parsing
+
+The default [express setting](https://expressjs.com/en/5x/api.html#app.settings.table) is `'simple'`.
+In order to support complex query params (like arrays) out of the box,
+this option is set to `'extended'` by default.
+
+```typescript
+import { createExpressServer } from 'routing-controllers-extended';
+import { UserController } from './UserController';
+
+const app = createExpressServer({
+  express: {
+    queryParser: 'simple', // 'extended' by default
   },
   controllers: [UserController],
 });

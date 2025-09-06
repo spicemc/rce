@@ -11,12 +11,11 @@ import { isPromiseLike } from '../../util/isPromiseLike';
 import { getFromContainer } from '../../container';
 import { RoleChecker } from '../../RoleChecker';
 import { AuthorizationRequiredError } from '../../error/AuthorizationRequiredError';
-import { HttpError, NotFoundError } from '../../index';
+import { HttpError, NotFoundError, RoutingControllersOptions } from '../../index';
 import { Callable } from '../../types/Types';
 
-// eslint-disable-next-line @typescript-eslint/no-var-requires
 const cookie = require('cookie');
-// eslint-disable-next-line @typescript-eslint/no-var-requires
+
 const templateUrl = require('template-url');
 
 /**
@@ -27,7 +26,10 @@ export class KoaDriver extends BaseDriver {
   // Constructor
   // -------------------------------------------------------------------------
 
-  constructor(public koa?: any, public router?: any) {
+  constructor(
+    public koa?: any,
+    public router?: any,
+  ) {
     super();
     this.loadKoa();
     this.loadRouter();
@@ -41,12 +43,11 @@ export class KoaDriver extends BaseDriver {
   /**
    * Initializes the things driver needs before routes and middleware registration.
    */
-  initialize() {
-    // eslint-disable-next-line @typescript-eslint/no-var-requires
+
+  initialize(options: RoutingControllersOptions) {
     const bodyParser = require('koa-bodyparser');
     this.koa.use(bodyParser());
     if (this.cors) {
-      // eslint-disable-next-line @typescript-eslint/no-var-requires
       const cors = require('@koa/cors');
       if (this.cors === true) {
         this.koa.use(cors());
@@ -250,13 +251,12 @@ export class KoaDriver extends BaseDriver {
         options.response.redirect(action.redirect);
       }
     } else if (action.renderedTemplate) {
-      // if template is set then render it // TODO: not working in koa
+      // if template is set then render it
       const renderOptions = result && result instanceof Object ? result : {};
-
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      this.koa.use(async function (ctx: any, next: any) {
-        await ctx.render(action.renderedTemplate, renderOptions);
-      });
+      const ctxLocals = options.context.locals || {};
+      const oldNext = options.next;
+      options.next = () =>
+        options.context.render(action.renderedTemplate, { ...ctxLocals, ...renderOptions }).then(oldNext);
     } else if (result === undefined) {
       // throw NotFoundError on undefined response
       if (action.undefinedResultCode instanceof Function) {
@@ -327,7 +327,7 @@ export class KoaDriver extends BaseDriver {
 
         return resolve();
       }
-      return reject(error);
+      return reject(error instanceof Error ? error : new Error(String(error)));
     });
   }
 
@@ -369,8 +369,8 @@ export class KoaDriver extends BaseDriver {
     if (require) {
       if (!this.koa) {
         try {
-          // eslint-disable-next-line @typescript-eslint/no-var-requires
           this.koa = new (require('koa'))();
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
         } catch (e) {
           throw new Error('koa package was not found installed. Try to install it: npm install koa@next --save');
         }
@@ -387,8 +387,8 @@ export class KoaDriver extends BaseDriver {
     if (require) {
       if (!this.router) {
         try {
-          // eslint-disable-next-line @typescript-eslint/no-var-requires
           this.router = new (require('@koa/router'))();
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
         } catch (e) {
           throw new Error(
             '@koa/router package was not found installed. Try to install it: npm install @koa/router --save',
@@ -406,6 +406,7 @@ export class KoaDriver extends BaseDriver {
   private loadMulter() {
     try {
       return require('@koa/multer');
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (e) {
       throw new Error('@koa/multer package was not found installed. Try to install it: npm install @koa/multer --save');
     }

@@ -983,7 +983,9 @@ describe(``, () => {
     expect(response.status).toEqual(HttpStatusCodes.NO_CONTENT);
 
     try {
-      response = await axios.post('/users-with-required');
+      response = await axios.post('/users-with-required', null, {
+        headers: { 'Content-Type': 'application/json' },
+      });
     } catch (error: any) {
       const err = error as AxiosError;
       expect(err.response?.status).toEqual(HttpStatusCodes.BAD_REQUEST);

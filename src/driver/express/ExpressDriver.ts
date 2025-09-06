@@ -14,9 +14,8 @@ import { AuthorizationRequiredError } from '../../error/AuthorizationRequiredErr
 import { NotFoundError, RoutingControllersOptions } from '../../index';
 import { Callable } from '../../types/Types';
 
-// eslint-disable-next-line @typescript-eslint/no-var-requires
 const cookie = require('cookie');
-// eslint-disable-next-line @typescript-eslint/no-var-requires
+
 const templateUrl = require('template-url');
 
 /**
@@ -40,9 +39,10 @@ export class ExpressDriver extends BaseDriver {
   /**
    * Initializes the things driver needs before routes and middlewares registration.
    */
-  initialize() {
+  initialize(options: RoutingControllersOptions) {
+    this.express.set('query parser', options.express?.queryParser ?? 'extended');
+
     if (this.cors) {
-      // eslint-disable-next-line @typescript-eslint/no-var-requires
       const cors = require('cors');
       if (this.cors === true) {
         this.express.use(cors());
@@ -97,14 +97,15 @@ export class ExpressDriver extends BaseDriver {
    * Registers action in the driver.
    */
   registerAction(actionMetadata: ActionMetadata, executeCallback: (options: Action) => any): void {
+    const express = require('express');
     // middlewares required for this action
     const defaultMiddlewares: any[] = [];
 
     if (actionMetadata.isBodyUsed) {
       if (actionMetadata.isJsonTyped) {
-        defaultMiddlewares.push(this.loadBodyParser().json(actionMetadata.bodyExtraOptions));
+        defaultMiddlewares.push(express.json(actionMetadata.bodyExtraOptions));
       } else {
-        defaultMiddlewares.push(this.loadBodyParser().text(actionMetadata.bodyExtraOptions));
+        defaultMiddlewares.push(express.text(actionMetadata.bodyExtraOptions));
       }
     }
 
@@ -190,7 +191,6 @@ export class ExpressDriver extends BaseDriver {
   /**
    * Registers all routes in the framework.
    */
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
   registerRoutes() {}
 
   /**
@@ -449,8 +449,8 @@ export class ExpressDriver extends BaseDriver {
     if (require) {
       if (!this.express) {
         try {
-          // eslint-disable-next-line @typescript-eslint/no-var-requires
           this.express = require('express')();
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
         } catch (e) {
           throw new Error('express package was not found installed. Try to install it: npm install express --save');
         }
@@ -461,22 +461,12 @@ export class ExpressDriver extends BaseDriver {
   }
 
   /**
-   * Dynamically loads body-parser module.
-   */
-  protected loadBodyParser() {
-    try {
-      return require('body-parser');
-    } catch (e) {
-      throw new Error('body-parser package was not found installed. Try to install it: npm install body-parser --save');
-    }
-  }
-
-  /**
    * Dynamically loads multer module.
    */
   protected loadMulter() {
     try {
       return require('multer');
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (e) {
       throw new Error('multer package was not found installed. Try to install it: npm install multer --save');
     }

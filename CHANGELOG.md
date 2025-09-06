@@ -1,5 +1,13 @@
 # Changelog and release notes
 
+### 2.0.0
+
+- Updated packages
+- New option to set the expressjs query parser
+- [BREAKING CHANGE] Expressjs 5 upgrade
+
+Checkout the [Expressjs Migration Guide](https://expressjs.com/en/guide/migrating-5.html)
+
 ### 1.0.8
 
 - Updated packages
