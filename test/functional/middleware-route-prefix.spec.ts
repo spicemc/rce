@@ -55,17 +55,17 @@ describe(``, () => {
         }
       }
 
-      expressServer1 = await createExpressServer({
+      const expressApp1 = await createExpressServer({
         routePrefix: '/app',
         middlewares: [FirstAfterMiddleware, SecondAfterMiddleware, ThirdAfterMiddleware],
       });
-      expressServer1.listen(3001);
+      expressServer1 = expressApp1.listen(3001);
 
-      expressServer2 = await createExpressServer({
+      const expressApp2 = await createExpressServer({
         routePrefix: '/admin',
         middlewares: [SecondAfterMiddleware],
       });
-      expressServer2.listen(3011);
+      expressServer2 = expressApp2.listen(3011);
     });
 
     afterAll((done: DoneCallback) => {
