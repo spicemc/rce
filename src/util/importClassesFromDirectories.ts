@@ -1,6 +1,6 @@
-import path from 'path';
+import * as path from 'path';
 import { pathToFileURL } from 'url';
-import glob from 'glob';
+import * as glob from 'glob';
 import { Newable } from '../types/Types';
 
 /**

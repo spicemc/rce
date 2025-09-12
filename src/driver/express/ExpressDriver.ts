@@ -24,9 +24,8 @@ import * as templateUrl from 'template-url';
  * Integration with express framework.
  */
 export class ExpressDriver extends BaseDriver {
-  // -------------------------------------------------------------------------
-  // Constructor
-  // -------------------------------------------------------------------------
+  private globalBeforeMiddlewares: Callable[] = [];
+  private globalAfterMiddlewares: Callable[] = [];
 
   constructor(public express?: any) {
     super();
@@ -94,7 +93,15 @@ export class ExpressDriver extends BaseDriver {
         writable: true,
       });
 
-      this.express.use(options.routePrefix || '/', middlewareWrapper);
+      // this.express.use(options.routePrefix || '/', middlewareWrapper);
+      if (middleware.type !== 'after') {
+        this.express.use(options.routePrefix || '/', middlewareWrapper);
+        this.globalBeforeMiddlewares.push(middlewareWrapper);
+      }
+      // After-Middleware - add later per route
+      else {
+        this.globalAfterMiddlewares.push(middlewareWrapper);
+      }
     }
   }
 
@@ -164,8 +171,14 @@ export class ExpressDriver extends BaseDriver {
 
     // user used middlewares
     const uses = [...actionMetadata.controllerMetadata.uses, ...actionMetadata.uses];
-    const beforeMiddlewares = this.prepareMiddlewares(uses.filter(use => !use.afterAction));
-    const afterMiddlewares = this.prepareMiddlewares(uses.filter(use => use.afterAction));
+    // const beforeMiddlewares = this.prepareMiddlewares(uses.filter(use => !use.afterAction));
+    // const afterMiddlewares = this.prepareMiddlewares(uses.filter(use => use.afterAction));
+    const decoratorBefore = this.prepareMiddlewares(uses.filter(use => !use.afterAction));
+    const decoratorAfter  = this.prepareMiddlewares(uses.filter(use => use.afterAction));
+
+    // handle global before and after middlewares
+    const beforeMiddlewares = [...this.globalBeforeMiddlewares, ...decoratorBefore];
+    const afterMiddlewares  = [...decoratorAfter, ...this.globalAfterMiddlewares];
 
     // prepare route and route handler function
     const route = ActionMetadata.appendBaseRoute(this.routePrefix, actionMetadata.fullRoute);
