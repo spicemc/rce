@@ -40,6 +40,6 @@ jobs:
         with:
           node-version: 'lts/*'
       - run: npm ci --ignore-scripts
-      - run: npm run build:es2015
+      - run: npm run build:esm
       - run: npm run build:cjs
       - run: npm run build:types

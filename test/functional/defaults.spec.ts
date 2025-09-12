@@ -15,7 +15,7 @@ describe(``, () => {
     const defaultUndefinedResultCode = 204;
     const defaultNullResultCode = 404;
 
-    beforeAll((done: DoneCallback) => {
+    beforeAll(async () => {
       getMetadataArgsStorage().reset();
 
       @Controller()
@@ -56,7 +56,7 @@ describe(``, () => {
         }
       }
 
-      expressServer = createExpressServer({
+      const expressApp = await createExpressServer({
         defaults: {
           nullResultCode: defaultNullResultCode,
           undefinedResultCode: defaultUndefinedResultCode,
@@ -64,7 +64,8 @@ describe(``, () => {
             required: true,
           },
         },
-      }).listen(3001, done);
+      });
+      expressServer = expressApp.listen(3001);
     });
 
     afterAll((done: DoneCallback) => {

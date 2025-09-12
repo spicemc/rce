@@ -28,7 +28,7 @@ describe(``, () => {
     });
 
     describe('useClassTransformer default value', () => {
-      beforeEach((done: DoneCallback) => {
+      beforeEach(async () => {
         @JsonController()
         class TestUserController {
           @Post('/users')
@@ -44,10 +44,11 @@ describe(``, () => {
           }
         }
 
-        expressServer = createExpressServer({
+        const expressApp = await createExpressServer({
           controllers: [TestUserController],
           validation: false,
-        }).listen(3001, done);
+        });
+        expressServer = expressApp.listen(3001);
       });
 
       afterEach((done: DoneCallback) => {
@@ -63,7 +64,7 @@ describe(``, () => {
     });
 
     describe('when useClassTransformer is set to true', () => {
-      beforeEach((done: DoneCallback) => {
+      beforeEach(async () => {
         @JsonController()
         class TestUserController {
           @Post('/users')
@@ -79,11 +80,12 @@ describe(``, () => {
           }
         }
 
-        expressServer = createExpressServer({
+        const expressApp = await createExpressServer({
           controllers: [TestUserController],
           classTransformer: true,
           validation: false,
-        }).listen(3001, done);
+        });
+        expressServer = expressApp.listen(3001);
       });
 
       afterEach((done: DoneCallback) => {
@@ -99,7 +101,7 @@ describe(``, () => {
     });
 
     describe('when useClassTransformer is set to false', () => {
-      beforeEach((done: DoneCallback) => {
+      beforeEach(async () => {
         @JsonController()
         class TestUserController {
           @Post('/users')
@@ -115,11 +117,12 @@ describe(``, () => {
           }
         }
 
-        expressServer = createExpressServer({
+        const expressApp = await createExpressServer({
           controllers: [TestUserController],
           classTransformer: false,
           validation: false,
-        }).listen(3001, done);
+        });
+        expressServer = expressApp.listen(3001);
       });
 
       afterEach((done: DoneCallback) => {
@@ -135,7 +138,7 @@ describe(``, () => {
     });
 
     describe('when routePrefix is used all controller routes should be appended by it', () => {
-      beforeEach((done: DoneCallback) => {
+      beforeEach(async () => {
         @JsonController()
         class TestUserController {
           @Post('/users')
@@ -151,11 +154,12 @@ describe(``, () => {
           }
         }
 
-        expressServer = createExpressServer({
+        const expressApp = await createExpressServer({
           controllers: [TestUserController],
           routePrefix: 'api',
           validation: false,
-        }).listen(3001, done);
+        });
+        expressServer = expressApp.listen(3001);
       });
 
       afterEach((done: DoneCallback) => {

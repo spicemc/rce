@@ -7,7 +7,7 @@ import { createExpressServer, getMetadataArgsStorage } from '../../src/index';
 import { axios } from '../utilities/axios';
 
 describe(``, () => {
-  let expressApp: any;
+  let expressServer: any;
   let initializedUser: any;
   let user: any = { firstName: 'Umed', lastName: 'Khudoiberdiev' };
 
@@ -19,7 +19,7 @@ describe(``, () => {
     lastName: string;
   }
 
-  beforeAll(done => {
+  beforeAll(async () => {
     // reset metadata args storage
     getMetadataArgsStorage().reset();
 
@@ -49,12 +49,13 @@ describe(``, () => {
       }
     }
 
-    expressApp = createExpressServer().listen(3001, done);
+    const expressApp = await createExpressServer();
+    expressServer = expressApp.listen(3001);
   });
 
   afterAll(done => {
     defaultMetadataStorage.clear();
-    expressApp.close(done);
+    expressServer.close(done);
   });
 
   beforeEach(() => {

@@ -12,7 +12,7 @@ describe(``, () => {
   let expressServer: HttpServer;
 
   describe('using typedi container should be possible', () => {
-    beforeEach((done: DoneCallback) => {
+    beforeEach(async () => {
       // reset metadata args storage
       useContainer(Container);
       getMetadataArgsStorage().reset();
@@ -66,7 +66,8 @@ describe(``, () => {
         }
       }
 
-      expressServer = createExpressServer().listen(3001, done);
+      const expressApp = await createExpressServer();
+      expressServer = expressApp.listen(3001);
     });
 
     afterEach((done: DoneCallback) => {
@@ -111,7 +112,7 @@ describe(``, () => {
   });
 
   describe('using custom container should be possible', () => {
-    beforeEach((done: DoneCallback) => {
+    beforeEach(async () => {
       const fakeContainer = {
         services: [] as any,
 
@@ -174,7 +175,8 @@ describe(``, () => {
         }
       }
 
-      expressServer = createExpressServer().listen(3001, done);
+      const expressApp = await createExpressServer();
+      expressServer = expressApp.listen(3001);
     });
 
     afterEach((done: DoneCallback) => {
@@ -219,7 +221,7 @@ describe(``, () => {
   });
 
   describe('using custom container with fallback should be possible', () => {
-    beforeEach((done: DoneCallback) => {
+    beforeEach(async () => {
       const fakeContainer = {
         services: [] as any,
 
@@ -295,7 +297,8 @@ describe(``, () => {
         }
       }
 
-      expressServer = createExpressServer().listen(3001, done);
+      const expressApp = await createExpressServer();
+      expressServer = expressApp.listen(3001);
     });
 
     afterEach((done: DoneCallback) => {
@@ -353,7 +356,7 @@ describe(``, () => {
   });
 
   describe('using custom container with fallback and fallback on throw error should be possible', () => {
-    beforeEach((done: DoneCallback) => {
+    beforeEach(async () => {
       const fakeContainer = {
         services: [] as any,
 
@@ -431,7 +434,8 @@ describe(``, () => {
       }
 
       // fakeContainer.services['TestContainerController'] = new TestContainerController(questionRepository, postRepository);
-      expressServer = createExpressServer().listen(3001, done);
+      const expressApp = await createExpressServer();
+      expressServer = expressApp.listen(3001);
     });
 
     afterEach((done: DoneCallback) => {

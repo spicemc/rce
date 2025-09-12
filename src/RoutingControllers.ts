@@ -53,8 +53,8 @@ export class RoutingControllers<T extends BaseDriver> {
   /**
    * Initializes the things driver needs before routes and middleware registration.
    */
-  initialize(options: RoutingControllersOptions): this {
-    this.driver.initialize(options);
+  async initialize(options: RoutingControllersOptions): Promise<this> {
+    await this.driver.initialize(options);
     return this;
   }
 

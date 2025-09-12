@@ -10,7 +10,7 @@ describe(``, () => {
   let koaServer: HttpServer;
 
   describe('koa trailing slashes', () => {
-    beforeEach((done: DoneCallback) => {
+    beforeEach(async () => {
       getMetadataArgsStorage().reset();
 
       @Controller('/posts')
@@ -21,7 +21,8 @@ describe(``, () => {
         }
       }
 
-      koaServer = createKoaServer().listen(3001, done);
+      const koaApp = await createKoaServer();
+      koaServer = koaApp.listen(3001);
     });
 
     afterEach((done: DoneCallback) => {

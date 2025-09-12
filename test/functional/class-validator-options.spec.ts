@@ -40,7 +40,7 @@ describe(``, () => {
   afterAll(() => defaultMetadataStorage.clear());
 
   describe('no options', () => {
-    beforeEach((done: DoneCallback) => {
+    beforeEach(async () => {
       requestFilter = undefined;
       getMetadataArgsStorage().reset();
 
@@ -57,9 +57,10 @@ describe(``, () => {
         }
       }
 
-      expressServer = createExpressServer({
+      const expressApp = await createExpressServer({
         validation: false,
-      }).listen(3001, done);
+      });
+      expressServer = expressApp.listen(3001);
     });
 
     afterEach((done: DoneCallback) => {
@@ -94,7 +95,7 @@ describe(``, () => {
 
   describe('global options', () => {
     describe('should merge local validation options with global validation options prioritizing local', () => {
-      beforeEach(done => {
+      beforeEach(async () => {
         requestFilter = undefined;
         getMetadataArgsStorage().reset();
 
@@ -118,7 +119,8 @@ describe(``, () => {
           },
         };
 
-        expressServer = createExpressServer(options).listen(3001, done);
+        const expressApp = await createExpressServer(options);
+        expressServer = expressApp.listen(3001);
       });
 
       afterEach((done: DoneCallback) => {
@@ -144,7 +146,7 @@ describe(``, () => {
     });
 
     describe('should pass the valid param after validation', () => {
-      beforeEach(done => {
+      beforeEach(async () => {
         requestFilter = undefined;
         getMetadataArgsStorage().reset();
 
@@ -165,7 +167,8 @@ describe(``, () => {
           validation: true,
         };
 
-        expressServer = createExpressServer(options).listen(3001, done);
+        const expressApp = await createExpressServer(options);
+        expressServer = expressApp.listen(3001);
       });
 
       afterEach((done: DoneCallback) => {
@@ -220,7 +223,7 @@ describe(``, () => {
   describe('local options', () => {
     let requestFilter: UserFilter | undefined;
 
-    beforeEach((done: DoneCallback) => {
+    beforeEach(async () => {
       requestFilter = undefined;
       getMetadataArgsStorage().reset();
 
@@ -238,9 +241,10 @@ describe(``, () => {
         }
       }
 
-      expressServer = createExpressServer({
+      const expressApp = await createExpressServer({
         validation: false,
-      }).listen(3001, done);
+      });
+      expressServer = expressApp.listen(3001);
     });
 
     afterEach((done: DoneCallback) => {

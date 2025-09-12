@@ -1,36 +1,69 @@
-import * as path from 'path';
+import path from 'path';
+import { pathToFileURL } from 'url';
+import glob from 'glob';
 import { Newable } from '../types/Types';
 
 /**
- * Loads all exported classes from the given directory.
+ * Dynamically imports a module from disk via a file:// URL
+ * and returns its exports object.
  */
-export function importClassesFromDirectories(directories: string[], formats = ['.js', '.ts', '.tsx']): Newable[] {
-  const loadFileClasses = function (exported: any, allLoaded: Newable[]) {
-    if (exported instanceof Function) {
-      allLoaded.push(exported);
-    } else if (exported instanceof Array) {
-      exported.forEach((i: any) => loadFileClasses(i, allLoaded));
-    } else if (exported instanceof Object || typeof exported === 'object') {
-      Object.keys(exported).forEach(key => loadFileClasses(exported[key], allLoaded));
+async function loadModule(file: string): Promise<any> {
+  const absolute = path.resolve(file);
+  const url = pathToFileURL(absolute).href;
+  return import(url);
+}
+
+/**
+ * Recursively walks over an exported value and collects
+ * all constructor functions (classes) into `collector`.
+ */
+function collectClasses(exported: any, collector: Newable[]): void {
+  if (typeof exported === 'function') {
+    collector.push(exported as Newable);
+
+  } else if (Array.isArray(exported)) {
+    for (const item of exported) {
+      collectClasses(item, collector);
     }
 
-    return allLoaded;
-  };
+  } else if (exported && typeof exported === 'object') {
+    for (const value of Object.values(exported)) {
+      collectClasses(value, collector);
+    }
+  }
+}
 
-  const allFiles = directories.reduce((allDirs, dir) => {
-    // Replace \ with /
+/**
+ * Loads all exported classes from the given directories.
+ *
+ * @param directories  Array of glob patterns or paths to scan
+ * @param formats      File extensions to include (defaults to .js/.ts/.tsx)
+ * @returns Promise resolving to an array of class constructors
+ */
+export async function importClassesFromDirectories(
+  directories: string[],
+  formats: string[] = ['.js', '.ts', '.tsx']
+): Promise<Newable[]> {
+  // 1) Find all matching files
+  const allFiles = directories.flatMap(dir => {
+    const normalized = path.normalize(dir).replace(/\\/g, '/');
+    return glob.sync(normalized);
+  });
 
-    return allDirs.concat(require('glob').sync(path.normalize(dir).replace(/\\/g, '/')));
-  }, [] as string[]);
+  // 2) Filter out non-matching extensions and .d.ts files
+  const targets = allFiles.filter(file => {
+    const ext = path.extname(file);
+    const isDeclaration = file.endsWith('.d.ts');
+    return formats.includes(ext) && !isDeclaration;
+  });
 
-  const dirs = allFiles
-    .filter(file => {
-      const dtsExtension = file.substring(file.length - 5, file.length);
-      return formats.indexOf(path.extname(file)) !== -1 && dtsExtension !== '.d.ts';
-    })
-    .map(file => {
-      return require(file);
-    });
+  // 3) Import each file dynamically and collect exported classes
+  const classes: Newable[] = [];
+  for (const file of targets) {
+    const mod = await loadModule(file);
+    const exported = mod.default ?? mod;
+    collectClasses(exported, classes);
+  }
 
-  return loadFileClasses(dirs, []);
+  return classes;
 }

@@ -14,9 +14,12 @@
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
     "forceConsistentCasingInFileNames": true,
+    "allowSyntheticDefaultImports": true,
+    "typeRoots": ["node_modules/@types", "src/types"],
     "paths": {
       "@rce/*": ["./src/*"]
     }
   },
+  "include": ["src", "src/types/**/*.d.ts"],
   "exclude": ["build", "node_modules", "sample", "**/*.spec.ts", "test/**"]
 }

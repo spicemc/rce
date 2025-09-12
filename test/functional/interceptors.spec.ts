@@ -14,7 +14,7 @@ describe(``, () => {
   let expressServer: HttpServer;
 
   describe('interceptor', () => {
-    beforeAll((done: DoneCallback) => {
+    beforeAll(async () => {
       getMetadataArgsStorage().reset();
 
       @Interceptor()
@@ -80,7 +80,8 @@ describe(``, () => {
         }
       }
 
-      expressServer = createExpressServer().listen(3001, done);
+      const expressApp = await createExpressServer();
+      expressServer = expressApp.listen(3001);
     });
 
     afterAll((done: DoneCallback) => {

@@ -91,7 +91,7 @@ describe(``, () => {
     expressResponse = undefined;
   });
 
-  beforeAll(done => {
+  beforeAll(async () => {
     getMetadataArgsStorage().reset();
     class NestedQueryClass {
       @Min(5)
@@ -453,12 +453,13 @@ describe(``, () => {
       }
     }
 
-    expressServer = createExpressServer({
+    const expressApp = await createExpressServer({
       cors: {
         origin: 'http://localhost:3001',
         credentials: true,
       },
-    }).listen(3001, done);
+    });
+    expressServer = expressApp.listen(3001);
   });
 
   afterAll((done: DoneCallback) => {
