@@ -68,7 +68,6 @@ export class ExpressDriver extends BaseDriver {
         (middleware.instance as ExpressErrorMiddlewareInterface).error(error, request, response, next);
       };
     }
-
     // if its a regular middleware then register it as express middleware
     else if ((middleware.instance as ExpressMiddlewareInterface).use) {
       middlewareWrapper = (request: any, response: any, next: (err: any) => any) => {
@@ -94,7 +93,7 @@ export class ExpressDriver extends BaseDriver {
       });
 
       // this.express.use(options.routePrefix || '/', middlewareWrapper);
-      if (middleware.type !== 'after') {
+      if (middleware.type === 'before') {
         this.express.use(options.routePrefix || '/', middlewareWrapper);
         this.globalBeforeMiddlewares.push(middlewareWrapper);
       }
