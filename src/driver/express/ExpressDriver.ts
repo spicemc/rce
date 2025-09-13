@@ -17,7 +17,8 @@ import { importDefault } from '../../util/importDefault';
 
 import * as cookie from 'cookie';
 
-import * as templateUrl from 'template-url';
+import templateUrlModule from 'template-url';
+const templateUrl = (templateUrlModule as any).default ?? templateUrlModule;
 
 
 /**
@@ -26,6 +27,7 @@ import * as templateUrl from 'template-url';
 export class ExpressDriver extends BaseDriver {
   private globalBeforeMiddlewares: Callable[] = [];
   private globalAfterMiddlewares: Callable[] = [];
+  private globalErrorMiddlewares: Callable[] = [];
 
   constructor(public express?: any) {
     super();
@@ -67,6 +69,8 @@ export class ExpressDriver extends BaseDriver {
       middlewareWrapper = (error: any, request: any, response: any, next: (err?: any) => any) => {
         (middleware.instance as ExpressErrorMiddlewareInterface).error(error, request, response, next);
       };
+      this.globalErrorMiddlewares.push(middlewareWrapper);
+      return;
     }
     // if its a regular middleware then register it as express middleware
     else if ((middleware.instance as ExpressMiddlewareInterface).use) {
@@ -204,6 +208,11 @@ export class ExpressDriver extends BaseDriver {
     this.express[actionMetadata.type.toLowerCase()](
       ...[route, routeGuard, ...beforeMiddlewares, ...defaultMiddlewares, routeHandler, ...afterMiddlewares],
     );
+
+    // Register error middlewares
+    this.globalErrorMiddlewares.forEach(errorMiddlewares => {
+      this.express.use(errorMiddlewares);
+    });
   }
 
   /**
