@@ -15,7 +15,7 @@
     "emitDecoratorMetadata": true,
     "forceConsistentCasingInFileNames": true,
     "allowSyntheticDefaultImports": true,
-    "typeRoots": ["node_modules/@types", "src/types"],
+    "typeRoots": ["src/types"],
     "paths": {
       "@rce/*": ["./src/*"]
     }
