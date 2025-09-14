@@ -175,6 +175,13 @@ export abstract class BaseDriver {
   }
 
   /**
+   * Sets/Presets the app (like express or koa) or using the default.
+   *
+   * @param app Express/Koa app instance
+   */
+  abstract setApp(app?: any): Promise<void>;
+
+  /**
    * Initializes the things driver needs before routes and middleware registration.
    */
   abstract initialize(options: RoutingControllersOptions): Promise<void>;

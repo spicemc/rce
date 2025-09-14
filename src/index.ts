@@ -114,7 +114,8 @@ export function getMetadataArgsStorage(): MetadataArgsStorage {
  * Registers all loaded actions in your express application.
  */
 export async function useExpressServer<T>(expressServer: T, options?: RoutingControllersOptions): Promise<T> {
-  const driver = new ExpressDriver(expressServer);
+  const driver = new ExpressDriver();
+  await driver.setApp(expressServer);
   return createServer(driver, options);
 }
 
@@ -123,6 +124,7 @@ export async function useExpressServer<T>(expressServer: T, options?: RoutingCon
  */
 export async function createExpressServer(options?: RoutingControllersOptions): Promise<any> {
   const driver = new ExpressDriver();
+  await driver.setApp();
   return createServer(driver, options);
 }
 
@@ -130,7 +132,8 @@ export async function createExpressServer(options?: RoutingControllersOptions): 
  * Registers all loaded actions in your koa application.
  */
 export async function useKoaServer<T>(koaApp: T, options?: RoutingControllersOptions): Promise<T> {
-  const driver = new KoaDriver(koaApp);
+  const driver = new KoaDriver();
+  await driver.setApp(koaApp);
   return createServer(driver, options);
 }
 
@@ -139,6 +142,7 @@ export async function useKoaServer<T>(koaApp: T, options?: RoutingControllersOpt
  */
 export async function createKoaServer(options?: RoutingControllersOptions): Promise<any> {
   const driver = new KoaDriver();
+  await driver.setApp();
   return createServer(driver, options);
 }
 

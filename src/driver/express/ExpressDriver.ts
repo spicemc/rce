@@ -24,7 +24,9 @@ const templateUrl = templateUrlModule.default ?? templateUrlModule;
  * Integration with express framework.
  */
 export class ExpressDriver extends BaseDriver {
-  constructor(public express?: any) {
+  express: any;
+
+  constructor() {
     super();
   }
 
@@ -32,13 +34,18 @@ export class ExpressDriver extends BaseDriver {
   // Public Methods
   // -------------------------------------------------------------------------
 
+  async setApp(express?: any) {
+    if (express) {
+      this.express = express;
+    } else {
+      await this.loadExpress();
+      this.app = this.express;
+    }
+  }
   /**
    * Initializes the things driver needs before routes and middlewares registration.
    */
   async initialize(options: RoutingControllersOptions) {
-    await this.loadExpress();
-    this.app = this.express;
-
     this.express.set('query parser', options.express?.queryParser ?? 'extended');
 
     const corsMod = await import('cors');

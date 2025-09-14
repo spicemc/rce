@@ -24,33 +24,36 @@ const templateUrl = templateUrlModule.default ?? templateUrlModule;
  * Integration with koa framework.
  */
 export class KoaDriver extends BaseDriver {
+  koa: any;
+  router: any;
   // -------------------------------------------------------------------------
   // Constructor
   // -------------------------------------------------------------------------
 
-  constructor(
-    public koa?: any,
-    public router?: any,
-  ) {
+  constructor() {
     super();
-    // this.loadKoa();
-    // this.loadRouter();
-    // this.app = this.koa;
   }
 
   // -------------------------------------------------------------------------
   // Public Methods
   // -------------------------------------------------------------------------
 
+  async setApp(koa?: any) {
+    await this.loadRouter();
+
+    if (koa) {
+      this.app = koa;
+    } else {
+      await this.loadKoa();
+      this.app = this.koa;
+    }
+  }
+
   /**
    * Initializes the things driver needs before routes and middleware registration.
    */
 
   async initialize(options: RoutingControllersOptions) {
-    await this.loadKoa();
-    await this.loadRouter();
-    this.app = this.koa;
-
     const bodyParser = await import('koa-bodyparser');
     this.koa.use(bodyParser.default());
     if (this.cors) {
