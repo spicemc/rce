@@ -15,9 +15,10 @@ import { HttpError, NotFoundError, RoutingControllersOptions } from '../../index
 import { Callable } from '../../types/Types';
 import { importDefault } from '../../util/importDefault';
 
-import cookie from 'cookie';
+import * as cookie from 'cookie';
 
-import templateUrl from 'template-url';
+import templateUrlModule from 'template-url';
+const templateUrl = (templateUrlModule as any).default ?? templateUrlModule;
 
 /**
  * Integration with koa framework.
