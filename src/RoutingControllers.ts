@@ -76,8 +76,8 @@ export class RoutingControllers<T extends BaseDriver> {
   async registerControllers(classes?: Newable[]): Promise<this> {
     const controllers = this.metadataBuilder.buildControllerMetadata(classes);
 
-    for (const controller of controllers) {
-      for (const actionMetadata of controller.actions) {
+    for await (const controller of controllers) {
+      for await (const actionMetadata of controller.actions) {
         const interceptorFns = this.prepareInterceptors([
           ...this.interceptors,
           ...actionMetadata.controllerMetadata.interceptors,

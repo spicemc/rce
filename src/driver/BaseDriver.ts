@@ -187,7 +187,7 @@ export abstract class BaseDriver {
   /**
    * Registers action in the driver.
    */
-  abstract registerAction(action: ActionMetadata, executeCallback: (options: Action) => any): void;
+  abstract registerAction(action: ActionMetadata, executeCallback: (options: Action) => any): Promise<void>;
 
   /**
    * Registers all routes in the framework.
