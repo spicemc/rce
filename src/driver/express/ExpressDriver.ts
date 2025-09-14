@@ -18,18 +18,14 @@ import { importDefault } from '../../util/importDefault';
 import * as cookie from 'cookie';
 
 import templateUrlModule from 'template-url';
-const templateUrl = (templateUrlModule).default ?? templateUrlModule;
-
+const templateUrl = templateUrlModule.default ?? templateUrlModule;
 
 /**
  * Integration with express framework.
  */
 export class ExpressDriver extends BaseDriver {
-
   constructor(public express?: any) {
     super();
-    // this.loadExpress();
-    // this.app = this.express;
   }
 
   // -------------------------------------------------------------------------
@@ -464,9 +460,7 @@ export class ExpressDriver extends BaseDriver {
           throw new Error('Express instance is invalid');
         }
       } catch {
-        throw new Error(
-          'express package was not found. Install with `npm install express --save`.'
-        );
+        throw new Error('express package was not found. Install with `npm install express --save`.');
       }
     }
   }
@@ -476,14 +470,10 @@ export class ExpressDriver extends BaseDriver {
    */
   protected async loadMulter(): Promise<any> {
     try {
-      // const multerMod = await import('multer');
-      // return multerMod.default ?? multerMod;
       const multer = await importDefault<typeof import('multer')>('multer');
       return multer;
     } catch {
-      throw new Error(
-        'multer package was not found. Install with `npm install multer --save`.'
-      );
+      throw new Error('multer package was not found. Install with `npm install multer --save`.');
     }
   }
 }

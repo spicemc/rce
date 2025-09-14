@@ -42,7 +42,7 @@ describe(``, () => {
 
       const resourcePath: string = path.resolve(__dirname, '../resources');
 
-      const koaApp = await createKoaServer() as Koa;
+      const koaApp = (await createKoaServer()) as Koa;
       koaEjs(koaApp, {
         root: resourcePath,
         layout: false,

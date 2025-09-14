@@ -20,12 +20,10 @@ async function loadModule(file: string): Promise<any> {
 function collectClasses(exported: any, collector: Newable[]): void {
   if (typeof exported === 'function') {
     collector.push(exported as Newable);
-
   } else if (Array.isArray(exported)) {
     for (const item of exported) {
       collectClasses(item, collector);
     }
-
   } else if (exported && typeof exported === 'object') {
     for (const value of Object.values(exported)) {
       collectClasses(value, collector);
@@ -42,7 +40,7 @@ function collectClasses(exported: any, collector: Newable[]): void {
  */
 export async function importClassesFromDirectories(
   directories: string[],
-  formats: string[] = ['.js', '.ts', '.tsx']
+  formats: string[] = ['.js', '.ts', '.tsx'],
 ): Promise<Newable[]> {
   // 1) Find all matching files
   const allFiles = directories.flatMap(dir => {

@@ -39,7 +39,7 @@ describe(``, () => {
 
       const expressApp = await createExpressServer({
         controllers: [PostController],
-      })
+      });
       expressServer = expressApp.listen(3001);
 
       // async function bootstrap() {

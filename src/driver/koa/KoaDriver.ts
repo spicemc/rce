@@ -18,7 +18,7 @@ import { importDefault } from '../../util/importDefault';
 import * as cookie from 'cookie';
 
 import templateUrlModule from 'template-url';
-const templateUrl = (templateUrlModule).default ?? templateUrlModule;
+const templateUrl = templateUrlModule.default ?? templateUrlModule;
 
 /**
  * Integration with koa framework.
@@ -378,9 +378,6 @@ export class KoaDriver extends BaseDriver {
   protected async loadKoa() {
     if (!this.koa) {
       try {
-        // const koaMod = await import('koa');
-        // const Koa = koaMod.default ?? koaMod;
-        // this.koa = new Koa();
         const koa = await importDefault<typeof import('koa')>('koa');
         this.koa = new koa();
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -398,9 +395,6 @@ export class KoaDriver extends BaseDriver {
   private async loadRouter() {
     if (!this.router) {
       try {
-        // const routerMod = await import('@koa/router');
-        // const Router = routerMod.default ?? routerMod;
-        // this.router = new Router();
         const Router = await importDefault<typeof import('@koa/router')>('@koa/router');
         this.router = new Router();
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -419,8 +413,6 @@ export class KoaDriver extends BaseDriver {
    */
   private async loadMulter() {
     try {
-      // const multerMod = await import('@koa/multer');
-      // return multerMod.default ?? multerMod;
       const multer = await importDefault<typeof import('@koa/multer')>('@koa/multer');
       return multer;
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
