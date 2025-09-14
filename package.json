@@ -1,7 +1,7 @@
 {
   "name": "routing-controllers-extended",
   "private": false,
-  "version": "2.0.1",
+  "version": "2.1.0",
   "description": "Create structured, declarative and beautifully organized class-based controllers with heavy decorators usage for Express / Koa using TypeScript.",
   "author": "TypeStack contributors",
   "license": "MIT",
@@ -50,15 +50,13 @@
   },
   "dependencies": {
     "cookie": "^1.0.2",
-    "express-session": "^1.18.2",
     "glob": "^11.0.3",
     "reflect-metadata": "^0.2.2",
     "template-url": "^1.0.0"
   },
   "peerDependencies": {
     "class-transformer": "^0.5.1",
-    "class-validator": "^0.14.2",
-    "express": "^5.1.0"
+    "class-validator": "^0.14.2"
   },
   "devDependencies": {
     "@koa/cors": "^5.0.0",
@@ -109,6 +107,7 @@
     "@koa/multer": "^4.0.0",
     "@koa/router": "^14.0.0",
     "express": "^5.1.0",
+    "express-session": "^1.18.2",
     "koa": "^3.0.1",
     "koa-bodyparser": "^4.4.1",
     "multer": "^2.0.2"
