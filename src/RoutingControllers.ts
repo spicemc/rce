@@ -73,20 +73,23 @@ export class RoutingControllers<T extends BaseDriver> {
   /**
    * Registers all given controllers and actions from those controllers.
    */
-  registerControllers(classes?: Newable[]): this {
+  async registerControllers(classes?: Newable[]): Promise<this> {
     const controllers = this.metadataBuilder.buildControllerMetadata(classes);
-    controllers.forEach(controller => {
-      controller.actions.forEach(actionMetadata => {
+
+    for (const controller of controllers) {
+      for (const actionMetadata of controller.actions) {
         const interceptorFns = this.prepareInterceptors([
           ...this.interceptors,
           ...actionMetadata.controllerMetadata.interceptors,
           ...actionMetadata.interceptors,
         ]);
-        this.driver.registerAction(actionMetadata, (action: Action) => {
+
+        await this.driver.registerAction(actionMetadata, (action: Action) => {
           return this.executeAction(actionMetadata, action, interceptorFns);
         });
-      });
-    });
+      }
+    }
+
     this.driver.registerRoutes();
     return this;
   }

@@ -177,7 +177,7 @@ export abstract class BaseDriver {
   /**
    * Initializes the things driver needs before routes and middleware registration.
    */
-  abstract initialize(options: RoutingControllersOptions): void;
+  abstract initialize(options: RoutingControllersOptions): Promise<void>;
 
   /**
    * Registers given middleware.

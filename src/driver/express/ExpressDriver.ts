@@ -18,16 +18,13 @@ import { importDefault } from '../../util/importDefault';
 import * as cookie from 'cookie';
 
 import templateUrlModule from 'template-url';
-const templateUrl = (templateUrlModule as any).default ?? templateUrlModule;
+const templateUrl = (templateUrlModule).default ?? templateUrlModule;
 
 
 /**
  * Integration with express framework.
  */
 export class ExpressDriver extends BaseDriver {
-  private globalBeforeMiddlewares: Callable[] = [];
-  private globalAfterMiddlewares: Callable[] = [];
-  private globalErrorMiddlewares: Callable[] = [];
 
   constructor(public express?: any) {
     super();
@@ -69,8 +66,6 @@ export class ExpressDriver extends BaseDriver {
       middlewareWrapper = (error: any, request: any, response: any, next: (err?: any) => any) => {
         (middleware.instance as ExpressErrorMiddlewareInterface).error(error, request, response, next);
       };
-      this.globalErrorMiddlewares.push(middlewareWrapper);
-      return;
     }
     // if its a regular middleware then register it as express middleware
     else if ((middleware.instance as ExpressMiddlewareInterface).use) {
@@ -96,15 +91,7 @@ export class ExpressDriver extends BaseDriver {
         writable: true,
       });
 
-      // this.express.use(options.routePrefix || '/', middlewareWrapper);
-      if (middleware.type === 'before') {
-        this.express.use(options.routePrefix || '/', middlewareWrapper);
-        this.globalBeforeMiddlewares.push(middlewareWrapper);
-      }
-      // After-Middleware - add later per route
-      else {
-        this.globalAfterMiddlewares.push(middlewareWrapper);
-      }
+      this.express.use(options.routePrefix || '/', middlewareWrapper);
     }
   }
 
@@ -174,14 +161,8 @@ export class ExpressDriver extends BaseDriver {
 
     // user used middlewares
     const uses = [...actionMetadata.controllerMetadata.uses, ...actionMetadata.uses];
-    // const beforeMiddlewares = this.prepareMiddlewares(uses.filter(use => !use.afterAction));
-    // const afterMiddlewares = this.prepareMiddlewares(uses.filter(use => use.afterAction));
-    const decoratorBefore = this.prepareMiddlewares(uses.filter(use => !use.afterAction));
-    const decoratorAfter  = this.prepareMiddlewares(uses.filter(use => use.afterAction));
-
-    // handle global before and after middlewares
-    const beforeMiddlewares = [...this.globalBeforeMiddlewares, ...decoratorBefore];
-    const afterMiddlewares  = [...decoratorAfter, ...this.globalAfterMiddlewares];
+    const beforeMiddlewares = this.prepareMiddlewares(uses.filter(use => !use.afterAction));
+    const afterMiddlewares = this.prepareMiddlewares(uses.filter(use => use.afterAction));
 
     // prepare route and route handler function
     const route = ActionMetadata.appendBaseRoute(this.routePrefix, actionMetadata.fullRoute);
@@ -208,11 +189,6 @@ export class ExpressDriver extends BaseDriver {
     this.express[actionMetadata.type.toLowerCase()](
       ...[route, routeGuard, ...beforeMiddlewares, ...defaultMiddlewares, routeHandler, ...afterMiddlewares],
     );
-
-    // Register error middlewares
-    this.globalErrorMiddlewares.forEach(errorMiddlewares => {
-      this.express.use(errorMiddlewares);
-    });
   }
 
   /**

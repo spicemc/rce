@@ -18,7 +18,7 @@ import { importDefault } from '../../util/importDefault';
 import * as cookie from 'cookie';
 
 import templateUrlModule from 'template-url';
-const templateUrl = (templateUrlModule as any).default ?? templateUrlModule;
+const templateUrl = (templateUrlModule).default ?? templateUrlModule;
 
 /**
  * Integration with koa framework.
