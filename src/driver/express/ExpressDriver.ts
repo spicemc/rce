@@ -104,6 +104,7 @@ export class ExpressDriver extends BaseDriver {
   async registerAction(actionMetadata: ActionMetadata, executeCallback: (options: Action) => any): Promise<void> {
     const expMod = await import('express');
     const express = expMod.default ?? expMod;
+
     // middlewares required for this action
     const defaultMiddlewares: any[] = [];
 
@@ -462,10 +463,6 @@ export class ExpressDriver extends BaseDriver {
         }
 
         this.express = exp();
-
-        if (!this.express || typeof this.express.set !== 'function') {
-          throw new Error('Express instance is invalid');
-        }
       } catch {
         throw new Error('express package was not found. Install with `npm install express --save`.');
       }

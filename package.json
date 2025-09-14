@@ -44,7 +44,6 @@
     "lint:fix": "eslint --max-warnings 0 --fix --ext .ts src/",
     "lint:check": "eslint --max-warnings 0 --ext .ts src/",
     "test": "jest --verbose --runInBand --no-cache",
-    "test:as": "jest --runInBand --no-cache --silent | grep '^FAIL'",
     "test:watch": "jest --watch",
     "test:ci": "jest --runInBand --no-cache --coverage --verbose",
     "test:debug": "NODE_ENV= node --inspect=127.0.0.1:20001 --inspect-brk ./node_modules/.bin/jest --colors --runInBand --no-coverage --watch"
