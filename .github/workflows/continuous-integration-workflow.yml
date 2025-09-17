@@ -12,6 +12,8 @@ jobs:
       - run: npm ci --ignore-scripts
       - run: npm run prettier:check
       - run: npm run lint:check
+      - run: npm run check:cjs
+      - run: npm run check:esm
   tests:
     name: Tests
     runs-on: ubuntu-latest
@@ -27,10 +29,6 @@ jobs:
           node-version: ${{ matrix.node-version }}
       - run: npm ci --ignore-scripts
       - run: npm run test:ci
-      # - run: npm install codecov -g
-      #   if: ${{ matrix.node-version == 'current' }}
-      # - run: codecov -f ./coverage/clover.xml -t ${{ secrets.CODECOV_TOKEN }} --commit=$GITHUB_SHA --branch=${GITHUB_REF##*/}
-      #   if: ${{ matrix.node-version == 'current' }}
   build:
     name: Build
     runs-on: ubuntu-latest

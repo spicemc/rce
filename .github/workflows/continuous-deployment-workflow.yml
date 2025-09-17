@@ -15,6 +15,8 @@ jobs:
       - run: npm ci --ignore-scripts
       - run: npm run prettier:check
       - run: npm run lint:check
+      - run: npm run check:cjs
+      - run: npm run check:esm
       - run: npm run test:ci
       - run: npm run build:esm
       - run: npm run build:cjs
