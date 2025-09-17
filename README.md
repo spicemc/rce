@@ -1,11 +1,8 @@
 # routing-controllers-extended
 
-<!-- ![Build Status](https://github.com/spicemc/rce/workflows/CI/badge.svg)
-[![codecov](https://codecov.io/gh/typestack/routing-controllers/branch/develop/graph/badge.svg)](https://codecov.io/gh/typestack/routing-controllers)
-[![npm version](https://badge.fury.io/js/routing-controllers.svg)](https://badge.fury.io/js/routing-controllers)
-[![Dependency Status](https://david-dm.org/typestack/routing-controllers.svg)](https://david-dm.org/typestack/routing-controllers) -->
+![Build Status](https://github.com/spicemc/rce/workflows/CI/badge.svg)
+[![npm version](https://badge.fury.io/js/routing-controllers-extended.svg)](https://badge.fury.io/js/routing-controllers-extended)
 
-English | [中文](./docs/lang/chinese/README.md)
 
 Allows to create controller classes with methods as actions that handle requests.
 You can use routing-controllers-extended with [express.js][1] or [koa.js][2].
@@ -93,7 +90,7 @@ import 'reflect-metadata';
 
    **a. If you want to use routing-controllers-extended with _express.js_, then install it and all required dependencies:**
 
-   `npm install express multer@1.4.5-lts.1`
+   `npm install express multer`
 
    Optionally you can also install their typings:
 
@@ -1608,11 +1605,7 @@ export class QuestionController {
 
 ## Samples
 
-- Take a look on [routing-controllers with express](https://github.com/typestack/routing-controllers-express-demo) which is using routing-controllers.
-- Take a look on [routing-controllers with koa](https://github.com/typestack/routing-controllers-koa-demo) which is using routing-controllers.
-- Take a look on [routing-controllers with angular 2](https://github.com/typestack/routing-controllers-angular2-demo) which is using routing-controllers.
-- Take a look on [node-microservice-demo](https://github.com/swimlane/node-microservice-demo) which is using routing-controllers.
-- Take a look on samples in [./sample](https://github.com/spicemc/rce/tree/master/sample) for more examples
+- Take a look on samples in [./sample](https://github.com/spicemc/rce/tree/develop/sample) for more examples
   of usage.
 
 ## Release notes
