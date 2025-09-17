@@ -3,7 +3,6 @@
 ![Build Status](https://github.com/spicemc/rce/workflows/CI/badge.svg)
 [![npm version](https://badge.fury.io/js/routing-controllers-extended.svg)](https://badge.fury.io/js/routing-controllers-extended)
 
-
 Allows to create controller classes with methods as actions that handle requests.
 You can use routing-controllers-extended with [express.js][1] or [koa.js][2].
 
