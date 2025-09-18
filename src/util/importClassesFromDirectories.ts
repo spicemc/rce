@@ -1,21 +1,28 @@
 import * as path from 'path';
-import { pathToFileURL } from 'url';
 import * as glob from 'glob';
+import { pathToFileURL } from 'url';
 import { Newable } from '../types/Types';
 
 /**
- * Dynamically imports a module from disk via a file:// URL
- * and returns its exports object.
+ * Dynamically loads a module using either import() or require(),
+ * depending on whether the current runtime supports ESM.
  */
 async function loadModule(file: string): Promise<any> {
   const absolute = path.resolve(file);
-  const url = pathToFileURL(absolute).href;
-  return import(url);
+
+  // esm mode check. __filename is only defined in CommonJS
+  const isESM = typeof __filename === 'undefined';
+
+  if (isESM) {
+    const url = pathToFileURL(absolute).href;
+    return import(url);
+  } else {
+    return Promise.resolve(require(absolute));
+  }
 }
 
 /**
- * Recursively walks over an exported value and collects
- * all constructor functions (classes) into `collector`.
+ * Recursively collects all class constructors from an export.
  */
 function collectClasses(exported: any, collector: Newable[]): void {
   if (typeof exported === 'function') {
@@ -33,34 +40,31 @@ function collectClasses(exported: any, collector: Newable[]): void {
 
 /**
  * Loads all exported classes from the given directories.
- *
- * @param directories  Array of glob patterns or paths to scan
- * @param formats      File extensions to include (defaults to .js/.ts/.tsx)
- * @returns Promise resolving to an array of class constructors
  */
 export async function importClassesFromDirectories(
   directories: string[],
   formats: string[] = ['.js', '.ts', '.tsx'],
 ): Promise<Newable[]> {
-  // 1) Find all matching files
   const allFiles = directories.flatMap(dir => {
     const normalized = path.normalize(dir).replace(/\\/g, '/');
     return glob.sync(normalized);
   });
 
-  // 2) Filter out non-matching extensions and .d.ts files
   const targets = allFiles.filter(file => {
     const ext = path.extname(file);
     const isDeclaration = file.endsWith('.d.ts');
     return formats.includes(ext) && !isDeclaration;
   });
 
-  // 3) Import each file dynamically and collect exported classes
   const classes: Newable[] = [];
   for (const file of targets) {
-    const mod = await loadModule(file);
-    const exported = mod.default ?? mod;
-    collectClasses(exported, classes);
+    try {
+      const mod = await loadModule(file);
+      const exported = mod.default ?? mod;
+      collectClasses(exported, classes);
+    } catch (err) {
+      console.error(`Failed to load ${file}:`, err);
+    }
   }
 
   return classes;
