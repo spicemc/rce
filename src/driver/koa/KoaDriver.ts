@@ -43,6 +43,7 @@ export class KoaDriver extends BaseDriver {
 
     if (koa) {
       this.app = koa;
+      this.koa = koa;
     } else {
       await this.loadKoa();
       this.app = this.koa;
