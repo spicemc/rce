@@ -11,6 +11,6 @@ import { useExpressServer } from '../../src/index.ts';
   app.listen(3001); // run express app
 
   console.log(
-    'Express server is running on port 3001. Open http://localhost:3001/blogs/ or http://localhost:3002/posts/',
+    'Express server is running on port 3001. Open http://localhost:3001/blogs/ or http://localhost:3001/posts/',
   );
 })();

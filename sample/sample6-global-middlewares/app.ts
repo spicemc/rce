@@ -11,7 +11,7 @@ import { AllErrorsHandler } from './AllErrorsHandler';
 (async () => {
   const app = await createExpressServer({
     controllers: [BlogController],
-    middlewares: [LoggerMiddleware, StartTimerMiddleware, EndTimerMiddleware, CompressionMiddleware],
+    middlewares: [LoggerMiddleware, StartTimerMiddleware, EndTimerMiddleware, CompressionMiddleware, AllErrorsHandler],
   });
   app.listen(3001);
   console.log('Express server is running on port 3001. Open http://localhost:3001/blogs/');

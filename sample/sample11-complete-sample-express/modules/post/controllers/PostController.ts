@@ -11,6 +11,7 @@ import { Delete } from '../../../../../src/decorator/Delete';
 export class PostController {
   @Get('/posts')
   getAll() {
+    console.log('Getting posts...');
     return this.createPromise(
       [
         { id: 1, name: 'Post 1!' },
