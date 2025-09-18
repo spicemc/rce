@@ -434,6 +434,23 @@ getUsers(@QueryParams() query: GetUsersQuery) {
 }
 ```
 
+You can use nested objects within query strings.
+
+`GET /blogs?filter[keyword]=ABCD&filter[limit]=30&filter[offset]=0`
+
+```typescript
+interface BlogFilter {
+  keyword: string;
+  limit: number;
+  offset: number;
+}
+
+@Get('/blogs')
+getAll(@QueryParam('filter', { required: true, parse: true }) filter: BlogFilter) {
+  // here you can access filter.keyword, filter.limit and filter.offset
+}
+```
+
 #### Inject request body
 
 To inject request body, use `@Body` decorator:
