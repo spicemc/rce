@@ -10,4 +10,3 @@ import { UserController } from './UserController';
   app.listen(3001);
   console.log('Express server is running on port 3001. Open http://localhost:3001/users/');
 })();
-

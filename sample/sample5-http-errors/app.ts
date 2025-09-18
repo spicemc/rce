@@ -14,7 +14,7 @@ import { BlogController } from './BlogController';
         httpCode: '400',
         message: 'Oops, Validation failed.',
       },
-    }
+    },
   });
   app.listen(3001);
   console.log('Express server is running on port 3001. Open http://localhost:3001/blogs/');

@@ -20,4 +20,3 @@ import { useExpressServer } from '../../src/index.ts';
     'http://localhost:3001/category/1000',
   );
 })();
-

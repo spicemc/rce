@@ -13,7 +13,7 @@ import { User } from './User';
       // const token = action.request.headers["authorization"];
       // return database.findUserByToken(token);
       return new User(1, 'Johny', 'Cage');
-    }
+    },
   });
   app.listen(3001);
   console.log('Express server is running on port 3001. Open http://localhost:3001/questions/');
