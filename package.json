@@ -1,21 +1,21 @@
 {
   "name": "routing-controllers-extended",
   "private": false,
-  "version": "3.0.0-alpha1",
+  "version": "3.0.0-alpha2",
   "description": "Create structured, declarative and beautifully organized class-based controllers with heavy decorators usage for Express / Koa using TypeScript.",
   "author": "TypeStack contributors",
   "license": "MIT",
   "sideEffects": false,
-  "main": "./build/cjs/index.js",
-  "module": "./build/esm/index.js",
-  "types": "./build/types/index.d.ts",
+  "main": "./cjs/index.js",
+  "module": "./esm/index.js",
+  "types": "./types/index.d.ts",
   "exports": {
     ".": {
-      "require": "./build/cjs/index.js",
-      "import": "./build/esm/index.js"
+      "require": "./cjs/index.js",
+      "import": "./esm/index.js"
     },
-    "./cjs": "./build/cjs/index.js",
-    "./esm": "./build/esm/index.js"
+    "./cjs": "./cjs/index.js",
+    "./esm": "./esm/index.js"
   },
   "repository": {
     "type": "git",
