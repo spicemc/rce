@@ -189,7 +189,9 @@ In prior versions, these were direct dependencies, but now they are peer depende
      app.listen(3000);
    })();
    ```
+
    > For more examples go to the [Samples](#samples)
+
 3. Open in browser `http://localhost:3000/users`. You will see `This action returns all users` in your browser.
    If you open `http://localhost:3000/users/1` you will see `This action returns user #1`.
 
