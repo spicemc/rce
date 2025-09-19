@@ -159,12 +159,12 @@ In prior versions, these were direct dependencies, but now they are peer depende
 2. Create a file `app.ts`
 
    ```typescript
-   // this shim is required
+   import 'reflect-metadata';
    import { createExpressServer } from 'routing-controllers-extended';
    import { UserController } from './UserController';
 
    // creates express app, registers all controller routes and returns you express app instance
-   const app = createExpressServer({
+   const app = await createExpressServer({
      controllers: [UserController], // we specify controllers we want to use
    });
 
@@ -174,6 +174,22 @@ In prior versions, these were direct dependencies, but now they are peer depende
 
    > if you are koa user you just need to use `createKoaServer` instead of `createExpressServer`
 
+   Here as an example without top level await
+
+   ```typescript
+   import 'reflect-metadata';
+   import Koa from 'koa';
+   import { createKoaServer } from 'routing-controllers-extended';
+   import { UserController } from './UserController';
+
+   (async () => {
+     const app = (await createKoaServer({
+       controllers: [UserController],
+     })) as Koa;
+     app.listen(3000);
+   })();
+   ```
+   > For more examples go to the [Samples](#samples)
 3. Open in browser `http://localhost:3000/users`. You will see `This action returns all users` in your browser.
    If you open `http://localhost:3000/users/1` you will see `This action returns user #1`.
 

@@ -1,5 +1,5 @@
 import 'reflect-metadata';
-import koa from 'koa';
+import Koa from 'koa';
 import koaEjs from '@koa/ejs';
 import path from 'node:path';
 import { createKoaServer, useKoaServer } from '../../src/index';
@@ -15,7 +15,7 @@ const resourcePath: string = path.resolve('./');
   // })) as Koa;
 
   // example with an existing koa app
-  let app = new koa();
+  let app = new Koa();
   await useKoaServer(app, {
     controllers: [BlogController],
   });
