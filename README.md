@@ -314,11 +314,11 @@ you can use `useExpressServer` instead of `createExpressServer` function:
 
 ```typescript
 import { useExpressServer } from 'routing-controllers-extended';
+import express from 'express'; // you can import it if you have installed typings
 
-let express = require('express'); // or you can import it if you have installed typings
 let app = express(); // your created express server
 // app.use() // you can configure it the way you want
-useExpressServer(app, {
+await useExpressServer(app, {
   // register created express server in routing-controllers-extended
   controllers: [UserController], // and configure it the way you need (controllers, validation, etc.)
 });
@@ -336,9 +336,10 @@ You can load all controllers from directories, by specifying array of directorie
 import { createExpressServer } from 'routing-controllers-extended';
 import path from 'path';
 
-createExpressServer({
+const app = await createExpressServer({
   controllers: [path.join(__dirname + '/controllers/*.js')],
-}).listen(3000); // register controllers routes in our express application
+}); // register controllers routes in our express application
+app.listen(3000);
 ```
 
 > koa users must use `createKoaServer` instead of `createExpressServer`
@@ -351,10 +352,11 @@ If you want to prefix all your routes, e.g. `/api` you can use `routePrefix` opt
 import { createExpressServer } from 'routing-controllers-extended';
 import { UserController } from './controller/UserController';
 
-createExpressServer({
+const app = await createExpressServer({
   routePrefix: '/api',
   controllers: [UserController],
-}).listen(3000);
+});
+app.listen(3000);
 ```
 
 > koa users must use `createKoaServer` instead of `createExpressServer`
@@ -833,7 +835,7 @@ you can enable it in routing-controllers-extended options.
 import { createExpressServer } from 'routing-controllers-extended';
 import { UserController } from './UserController';
 
-const app = createExpressServer({
+const app = await createExpressServer({
   cors: true,
   controllers: [UserController],
 });
@@ -849,7 +851,7 @@ You can pass cors options as well:
 import { createExpressServer } from 'routing-controllers-extended';
 import { UserController } from './UserController';
 
-const app = createExpressServer({
+const app = await createExpressServer({
   cors: {
     // options from cors documentation
   },
@@ -876,7 +878,7 @@ this option is set to `'extended'` by default.
 import { createExpressServer } from 'routing-controllers-extended';
 import { UserController } from './UserController';
 
-const app = createExpressServer({
+const app = await createExpressServer({
   express: {
     queryParser: 'simple', // 'extended' by default
   },
@@ -894,7 +896,7 @@ You can override default status code in routing-controllers-extended options.
 import { createExpressServer } from 'routing-controllers-extended';
 import { UserController } from './UserController';
 
-const app = createExpressServer({
+const app = await createExpressServer({
   defaults: {
     //with this option, null will return 404 by default
     nullResultCode: 404,
@@ -976,8 +978,9 @@ For example, lets try to use [compression](https://github.com/expressjs/compress
    ```typescript
    import { createExpressServer } from 'routing-controllers-extended';
    import { UserController } from './UserController'; // we need to "load" our controller before call createExpressServer. this is required
-   let compression = require('compression');
-   let app = createExpressServer({
+   import compression from 'compression';
+
+   let app = await createExpressServer({
      controllers: [UserController],
    }); // creates express app, registers all controller routes and returns you express app instance
    app.use(compression());
@@ -1136,10 +1139,11 @@ import { createExpressServer } from 'routing-controllers-extended';
 import { UserController } from './UserController';
 import { LoggingMiddleware } from './LoggingMiddleware';
 
-createExpressServer({
+const app = await createExpressServer({
   controllers: [UserController],
   middlewares: [LoggingMiddleware],
-}).listen(3000);
+});
+app.listen(3000);
 ```
 
 ### Error handlers
@@ -1165,9 +1169,10 @@ Custom error handlers are invoked after the default error handler, so you won't 
 To prevent this, you have to disable default error handler by specifying `defaultErrorHandler` option in createExpressServer or useExpressServer:
 
 ```typescript
-createExpressServer({
+const app = await createExpressServer({
   defaultErrorHandler: false, // disable default error handler, only if you have your own error handler
-}).listen(3000);
+});
+app.listen(3000);
 ```
 
 ### Loading middlewares, interceptors and controllers from directories
@@ -1178,11 +1183,12 @@ Also you can load middlewares from directories. Also you can use glob patterns:
 import { createExpressServer } from 'routing-controllers-extended';
 import path from 'path';
 
-createExpressServer({
+const app = await createExpressServer({
   controllers: [path.join(__dirname, '/controllers/**/*.js')],
   middlewares: [path.join(__dirname, '/middlewares/**/*.js')],
   interceptors: [path.join(__dirname, '/interceptors/**/*.js')],
-}).listen(3000);
+});
+app.listen(3000);
 ```
 
 ## Using interceptors
@@ -1268,9 +1274,10 @@ To use it simply specify a `classTransformer: true` option on application bootst
 ```typescript
 import { createExpressServer } from 'routing-controllers-extended';
 
-createExpressServer({
+const app = await createExpressServer({
   classTransformer: true,
-}).listen(3000);
+});
+app.listen(3000);
 ```
 
 Now, when you parse your action params, if you have specified a class, routing-controllers-extended will create you a class
@@ -1339,9 +1346,10 @@ It can be done easily thanks to integration with [class-validator][9]. This beha
 ```typescript
 import { createExpressServer } from 'routing-controllers-extended';
 
-createExpressServer({
+const app = await createExpressServer({
   validation: false,
-}).listen(3000);
+});
+app.listen(3000);
 ```
 
 If you want to turn on the validation only for some params, not globally for every parameter, you can do this locally by setting `validate: true` option in parameter decorator options object:
@@ -1397,7 +1405,7 @@ To make `@Authorized` decorator to work you need to setup special routing-contro
 ```typescript
 import { createExpressServer, Action } from 'routing-controllers-extended';
 
-createExpressServer({
+const app = await createExpressServer({
   authorizationChecker: async (action: Action, roles: string[]) => {
     // here you can use request/response objects from action
     // also if decorator defines roles it needs to access the action
@@ -1413,7 +1421,8 @@ createExpressServer({
 
     return false;
   },
-}).listen(3000);
+});
+app.listen(3000);
 ```
 
 You can use `@Authorized` on controller actions:
@@ -1438,7 +1447,7 @@ To make `@CurrentUser` decorator to work you need to setup special routing-contr
 ```typescript
 import { createExpressServer, Action } from 'routing-controllers-extended';
 
-createExpressServer({
+const app = await createExpressServer({
   currentUserChecker: async (action: Action) => {
     // here you can use request/response objects from action
     // you need to provide a user object that will be injected in controller actions
@@ -1446,7 +1455,8 @@ createExpressServer({
     const token = action.request.headers['authorization'];
     return getEntityManager().findOneByToken(User, token);
   },
-}).listen(3000);
+});
+app.listen(3000);
 ```
 
 You can use `@CurrentUser` on controller actions:
@@ -1481,11 +1491,12 @@ import path from 'path';
 useContainer(Container);
 
 // create and run server
-createExpressServer({
+const app = await createExpressServer({
   controllers: [path.join(__dirname, '/controllers/*.js')],
   middlewares: [path.join(__dirname, '/middlewares/*.js')],
   interceptors: [path.join(__dirname, '/interceptors/*.js')],
-}).listen(3000);
+});
+app.listen(3000);
 ```
 
 That's it, now you can inject your services into your controllers:
