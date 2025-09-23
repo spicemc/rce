@@ -593,7 +593,7 @@ saveFile(@UploadedFile("fileName", { options: fileUploadOptions }) file: any) {
 ```
 
 To inject all uploaded files use `@UploadedFiles` decorator instead.
-Routing-controllers uses [multer][3] to handle file uploads.
+Routing-controllers-extended uses [multer][3] to handle file uploads.
 You can install multer's file definitions via typings, and use `files: File[]` type instead of `any[]`.
 
 #### Make parameter required
@@ -1397,7 +1397,7 @@ This technique works not only with `@Body` but also with `@Param`, `@QueryParam`
 
 ## Using authorization features
 
-Routing-controllers comes with two decorators helping you to organize authorization in your application.
+Routing-controllers-extended comes with two decorators helping you to organize authorization in your application.
 
 #### `@Authorized` decorator
 
