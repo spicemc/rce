@@ -1,10 +1,11 @@
-# routing-controllers-extended
+# rce - routing-controllers-extended
 
 ![Build Status](https://github.com/spicemc/rce/workflows/CI/badge.svg)
 [![npm version](https://badge.fury.io/js/routing-controllers-extended.svg)](https://badge.fury.io/js/routing-controllers-extended)
 
-Allows to create controller classes with methods as actions that handle requests.
-You can use routing-controllers-extended with [express.js][1] or [koa.js][2].
+A lightweight and highly adaptable TypeScript framework for building REST APIs and microservices with Express or Koa. It’s fully compatible with both ESM and CommonJS, and it provides a flexible controller-based architecture that scales with your needs.
+
+Born as a fork of routing-controllers, this project brings a modernized codebase with seamless ESM/CJS integration. Use it with the latest versions of [express.js][1] or [koa.js][2] and start building production-ready APIs faster than ever in a structured way.
 
 # Table of Contents
 

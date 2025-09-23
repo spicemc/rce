@@ -1,8 +1,8 @@
 {
   "name": "routing-controllers-extended",
   "private": false,
-  "version": "3.0.0-alpha2",
-  "description": "Create structured, declarative and beautifully organized class-based controllers with heavy decorators usage for Express / Koa using TypeScript.",
+  "version": "3.0.0",
+  "description": "A lightweight and highly adaptable TypeScript framework for building REST-APIs and microservices with Express or Koa. It features full support for ESM and CommonJS. Designed for rapid development it provides a flexible controller-based architecture that scales with your needs.",
   "author": "TypeStack contributors",
   "license": "MIT",
   "sideEffects": false,
@@ -28,7 +28,11 @@
     "typescript-express",
     "typescript-express.js",
     "express-controllers",
-    "controllers"
+    "controllers",
+    "koa",
+    "koa.js",
+    "typescript-koa",
+    "typescript-framework"
   ],
   "scripts": {
     "build": "npm run build:clean && npm run build:cjs && npm run build:esm && npm run build:types",
