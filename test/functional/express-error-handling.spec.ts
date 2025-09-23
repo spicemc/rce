@@ -24,7 +24,7 @@ describe(``, () => {
       errorHandledSpecifically = undefined;
     });
 
-    beforeAll((done: DoneCallback) => {
+    beforeAll(async () => {
       getMetadataArgsStorage().reset();
 
       @Middleware({ type: 'after' })
@@ -113,7 +113,8 @@ describe(``, () => {
         }
       }
 
-      expressServer = createExpressServer().listen(3001, done);
+      const expressApp = await createExpressServer();
+      expressServer = expressApp.listen(3001);
     });
 
     afterAll((done: DoneCallback) => {

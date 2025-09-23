@@ -175,9 +175,16 @@ export abstract class BaseDriver {
   }
 
   /**
+   * Sets/Presets the app (like express or koa) or using the default.
+   *
+   * @param app Express/Koa app instance
+   */
+  abstract setApp(app?: any): Promise<void>;
+
+  /**
    * Initializes the things driver needs before routes and middleware registration.
    */
-  abstract initialize(options: RoutingControllersOptions): void;
+  abstract initialize(options: RoutingControllersOptions): Promise<void>;
 
   /**
    * Registers given middleware.
@@ -187,7 +194,7 @@ export abstract class BaseDriver {
   /**
    * Registers action in the driver.
    */
-  abstract registerAction(action: ActionMetadata, executeCallback: (options: Action) => any): void;
+  abstract registerAction(action: ActionMetadata, executeCallback: (options: Action) => any): Promise<void>;
 
   /**
    * Registers all routes in the framework.

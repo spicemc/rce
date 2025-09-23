@@ -12,7 +12,7 @@ describe(``, () => {
   let expressServer: HttpServer;
 
   describe('dynamic redirect', function () {
-    beforeAll((done: DoneCallback) => {
+    beforeAll(async () => {
       getMetadataArgsStorage().reset();
 
       @JsonController('/users')
@@ -46,7 +46,8 @@ describe(``, () => {
         }
       }
 
-      expressServer = createExpressServer().listen(3001, done);
+      const expressApp = await createExpressServer();
+      expressServer = expressApp.listen(3001);
     });
 
     afterAll((done: DoneCallback) => {

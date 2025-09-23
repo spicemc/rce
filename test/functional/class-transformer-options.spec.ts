@@ -16,7 +16,7 @@ describe('', () => {
   }
 
   let UserModel: any;
-  beforeAll(() => {
+  beforeEach(() => {
     class User {
       id: number;
       _firstName: string;
@@ -40,7 +40,7 @@ describe('', () => {
       requestFilter = undefined;
     });
 
-    beforeAll(done => {
+    beforeAll(async () => {
       getMetadataArgsStorage().reset();
 
       @JsonController()
@@ -56,7 +56,8 @@ describe('', () => {
         }
       }
 
-      expressServer = createExpressServer().listen(3001, done);
+      const expressApp = await createExpressServer();
+      expressServer = expressApp.listen(3001);
     });
 
     afterAll(done => {
@@ -87,7 +88,7 @@ describe('', () => {
       requestFilter = undefined;
     });
 
-    beforeAll(done => {
+    beforeAll(async () => {
       getMetadataArgsStorage().reset();
 
       const options: RoutingControllersOptions = {
@@ -112,7 +113,8 @@ describe('', () => {
         }
       }
 
-      expressServer = createExpressServer(options).listen(3001, done);
+      const expressApp = await createExpressServer(options);
+      expressServer = expressApp.listen(3001);
     });
 
     afterAll(done => {
@@ -140,7 +142,7 @@ describe('', () => {
       requestFilter = undefined;
     });
 
-    beforeAll(done => {
+    beforeAll(async () => {
       getMetadataArgsStorage().reset();
 
       @JsonController()
@@ -157,7 +159,8 @@ describe('', () => {
         }
       }
 
-      expressServer = createExpressServer().listen(3001, done);
+      const expressApp = await createExpressServer();
+      expressServer = expressApp.listen(3001);
     });
 
     afterAll(done => {

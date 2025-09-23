@@ -15,7 +15,7 @@ describe(``, () => {
   let expressServer: any;
 
   describe('json-controller methods', () => {
-    beforeAll(done => {
+    beforeAll(async () => {
       getMetadataArgsStorage().reset();
 
       @JsonController()
@@ -115,7 +115,8 @@ describe(``, () => {
         }
       }
 
-      expressServer = createExpressServer().listen(3001, done);
+      const expressApp = await createExpressServer();
+      expressServer = expressApp.listen(3001);
     });
 
     afterAll((done: DoneCallback) => {

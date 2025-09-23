@@ -26,7 +26,7 @@ describe(``, () => {
       errorHandlerName = undefined;
     });
 
-    beforeAll((done: DoneCallback) => {
+    beforeAll(async () => {
       @Middleware({ type: 'before' })
       class GlobalBeforeMiddleware implements ExpressMiddlewareInterface {
         use(request: express.Request, response: express.Response, next: express.NextFunction): any {
@@ -54,7 +54,8 @@ describe(``, () => {
         }
       }
 
-      expressServer = createExpressServer().listen(3001, done);
+      const expressApp = await createExpressServer();
+      expressServer = expressApp.listen(3001);
     });
 
     afterAll((done: DoneCallback) => {

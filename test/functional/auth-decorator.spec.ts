@@ -14,7 +14,7 @@ describe(``, () => {
   let expressServer: HttpServer;
 
   describe('Controller responds with value when Authorization succeeds (async)', () => {
-    beforeEach((done: DoneCallback) => {
+    beforeEach(async () => {
       getMetadataArgsStorage().reset();
 
       @JsonController()
@@ -39,12 +39,13 @@ describe(``, () => {
         }
       }
 
-      expressServer = createExpressServer({
+      const expressApp = await createExpressServer({
         authorizationChecker: async (action: Action, roles?: string[]) => {
           await sleep(10);
           return true;
         },
-      }).listen(3001, done);
+      });
+      expressServer = expressApp.listen(3001);
     });
 
     afterEach((done: DoneCallback) => {
@@ -74,7 +75,7 @@ describe(``, () => {
   });
 
   describe('Controller responds with value when Authorization succeeds (sync)', () => {
-    beforeEach((done: DoneCallback) => {
+    beforeEach(async () => {
       getMetadataArgsStorage().reset();
 
       @JsonController()
@@ -99,11 +100,12 @@ describe(``, () => {
         }
       }
 
-      expressServer = createExpressServer({
+      const expressApp = await createExpressServer({
         authorizationChecker: (action: Action, roles?: string[]) => {
           return true;
         },
-      }).listen(3001, done);
+      });
+      expressServer = expressApp.listen(3001);
     });
 
     afterEach((done: DoneCallback) => {
@@ -133,7 +135,7 @@ describe(``, () => {
   });
 
   describe('Authorized Decorators Http Status Code', () => {
-    beforeEach((done: DoneCallback) => {
+    beforeEach(async () => {
       getMetadataArgsStorage().reset();
 
       @JsonController()
@@ -151,11 +153,12 @@ describe(``, () => {
         }
       }
 
-      expressServer = createExpressServer({
+      const expressApp = await createExpressServer({
         authorizationChecker: (action: Action, roles?: string[]) => {
           return false;
         },
-      }).listen(3001, done);
+      });
+      expressServer = expressApp.listen(3001);
     });
 
     afterEach((done: DoneCallback) => {
@@ -182,7 +185,7 @@ describe(``, () => {
   });
 
   describe('Authorization checker allows to throw (async)', () => {
-    beforeEach((done: DoneCallback) => {
+    beforeEach(async () => {
       getMetadataArgsStorage().reset();
 
       @JsonController()
@@ -194,11 +197,12 @@ describe(``, () => {
         }
       }
 
-      expressServer = createExpressServer({
+      const expressApp = await createExpressServer({
         authorizationChecker: (action: Action, roles?: string[]) => {
           throw new NotAcceptableError('Custom Error');
         },
-      }).listen(3001, done);
+      });
+      expressServer = expressApp.listen(3001);
     });
 
     afterEach((done: DoneCallback) => {
@@ -218,7 +222,7 @@ describe(``, () => {
   });
 
   describe('Authorization checker allows to throw (sync)', () => {
-    beforeEach((done: DoneCallback) => {
+    beforeEach(async () => {
       // reset metadata args storage
       getMetadataArgsStorage().reset();
 
@@ -231,11 +235,12 @@ describe(``, () => {
         }
       }
 
-      expressServer = createExpressServer({
+      const expressApp = await createExpressServer({
         authorizationChecker: (action: Action, roles?: string[]) => {
           throw new NotAcceptableError('Custom Error');
         },
-      }).listen(3001, done);
+      });
+      expressServer = expressApp.listen(3001);
     });
 
     afterEach((done: DoneCallback) => {

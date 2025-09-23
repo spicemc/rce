@@ -10,7 +10,8 @@ describe(``, () => {
   let expressServer: HttpServer;
 
   describe('controller > base routes functionality', () => {
-    beforeEach((done: DoneCallback) => {
+    // beforeEach((done: DoneCallback) => {
+    beforeEach(async () => {
       getMetadataArgsStorage().reset();
 
       @Controller('/posts')
@@ -36,9 +37,23 @@ describe(``, () => {
         }
       }
 
-      expressServer = createExpressServer({
+      const expressApp = await createExpressServer({
         controllers: [PostController],
-      }).listen(3001, done);
+      });
+      expressServer = expressApp.listen(3001);
+
+      // async function bootstrap() {
+      //   const expressApp = await createExpressServer({
+      //     controllers: [PostController],
+      //   })
+      //   expressServer = expressApp.listen(3001);
+      // }
+
+      // await bootstrap();
+
+      // const expressApp = await createExpressServer({
+      //   controllers: [PostController],
+      // }).listen(3001, done);
     });
 
     afterEach((done: DoneCallback) => {

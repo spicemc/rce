@@ -19,7 +19,7 @@ export class BlogController {
   @Get('/blogs/:id')
   @ContentType('application/json')
   getOne(@Param('id') id: number) {
-    if (!id) throw new ForbiddenError();
+    if (id > 1) throw new ForbiddenError();
 
     return 'THIS STRING will BE not SO BIG';
   }

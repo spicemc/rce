@@ -21,7 +21,7 @@ describe(``, () => {
   let expressServer: HttpServer;
 
   describe('other controller decorators', () => {
-    beforeAll((done: DoneCallback) => {
+    beforeAll(async () => {
       getMetadataArgsStorage().reset();
 
       class QuestionNotFoundError extends HttpError {
@@ -129,7 +129,8 @@ describe(``, () => {
         }
       }
 
-      expressServer = createExpressServer().listen(3001, done);
+      const expressApp = await createExpressServer();
+      expressServer = expressApp.listen(3001);
     });
 
     afterAll((done: DoneCallback) => {

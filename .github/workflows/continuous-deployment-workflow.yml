@@ -16,9 +16,11 @@ jobs:
       - run: npm run prettier:check
       - run: npm run lint:check
       - run: npm run test:ci
-      - run: npm run build:es2015
+      - run: npm run build:esm
       - run: npm run build:cjs
       - run: npm run build:types
+      - run: npm run check:cjs
+      - run: npm run check:esm
       - run: cp LICENSE build/LICENSE
       - run: cp README.md build/README.md
       - run: jq 'del(.devDependencies) | del(.scripts)' package.json > build/package.json

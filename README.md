@@ -1,14 +1,11 @@
-# routing-controllers-extended
+# rce - routing-controllers-extended
 
-<!-- ![Build Status](https://github.com/spicemc/rce/workflows/CI/badge.svg)
-[![codecov](https://codecov.io/gh/typestack/routing-controllers/branch/develop/graph/badge.svg)](https://codecov.io/gh/typestack/routing-controllers)
-[![npm version](https://badge.fury.io/js/routing-controllers.svg)](https://badge.fury.io/js/routing-controllers)
-[![Dependency Status](https://david-dm.org/typestack/routing-controllers.svg)](https://david-dm.org/typestack/routing-controllers) -->
+![Build Status](https://github.com/spicemc/rce/workflows/CI/badge.svg)
+[![npm version](https://badge.fury.io/js/routing-controllers-extended.svg)](https://badge.fury.io/js/routing-controllers-extended)
 
-English | [中文](./docs/lang/chinese/README.md)
+A lightweight and highly adaptable TypeScript framework for building REST APIs and microservices with Express or Koa. It’s fully compatible with both ESM and CommonJS, and it provides a flexible controller-based architecture that scales with your needs.
 
-Allows to create controller classes with methods as actions that handle requests.
-You can use routing-controllers-extended with [express.js][1] or [koa.js][2].
+Born as a fork of routing-controllers, this project brings a modernized codebase with seamless ESM/CJS integration. Use it with the latest versions of [express.js][1] or [koa.js][2] and start building production-ready APIs faster than ever in a structured way.
 
 # Table of Contents
 
@@ -93,7 +90,7 @@ import 'reflect-metadata';
 
    **a. If you want to use routing-controllers-extended with _express.js_, then install it and all required dependencies:**
 
-   `npm install express multer@1.4.5-lts.1`
+   `npm install express multer`
 
    Optionally you can also install their typings:
 
@@ -163,12 +160,12 @@ In prior versions, these were direct dependencies, but now they are peer depende
 2. Create a file `app.ts`
 
    ```typescript
-   // this shim is required
+   import 'reflect-metadata';
    import { createExpressServer } from 'routing-controllers-extended';
    import { UserController } from './UserController';
 
    // creates express app, registers all controller routes and returns you express app instance
-   const app = createExpressServer({
+   const app = await createExpressServer({
      controllers: [UserController], // we specify controllers we want to use
    });
 
@@ -177,6 +174,24 @@ In prior versions, these were direct dependencies, but now they are peer depende
    ```
 
    > if you are koa user you just need to use `createKoaServer` instead of `createExpressServer`
+
+   Here as an example without top level await
+
+   ```typescript
+   import 'reflect-metadata';
+   import Koa from 'koa';
+   import { createKoaServer } from 'routing-controllers-extended';
+   import { UserController } from './UserController';
+
+   (async () => {
+     const app = (await createKoaServer({
+       controllers: [UserController],
+     })) as Koa;
+     app.listen(3000);
+   })();
+   ```
+
+   > For more examples go to the [Samples](#samples)
 
 3. Open in browser `http://localhost:3000/users`. You will see `This action returns all users` in your browser.
    If you open `http://localhost:3000/users/1` you will see `This action returns user #1`.
@@ -300,11 +315,11 @@ you can use `useExpressServer` instead of `createExpressServer` function:
 
 ```typescript
 import { useExpressServer } from 'routing-controllers-extended';
+import express from 'express'; // you can import it if you have installed typings
 
-let express = require('express'); // or you can import it if you have installed typings
 let app = express(); // your created express server
 // app.use() // you can configure it the way you want
-useExpressServer(app, {
+await useExpressServer(app, {
   // register created express server in routing-controllers-extended
   controllers: [UserController], // and configure it the way you need (controllers, validation, etc.)
 });
@@ -322,9 +337,10 @@ You can load all controllers from directories, by specifying array of directorie
 import { createExpressServer } from 'routing-controllers-extended';
 import path from 'path';
 
-createExpressServer({
+const app = await createExpressServer({
   controllers: [path.join(__dirname + '/controllers/*.js')],
-}).listen(3000); // register controllers routes in our express application
+}); // register controllers routes in our express application
+app.listen(3000);
 ```
 
 > koa users must use `createKoaServer` instead of `createExpressServer`
@@ -337,10 +353,11 @@ If you want to prefix all your routes, e.g. `/api` you can use `routePrefix` opt
 import { createExpressServer } from 'routing-controllers-extended';
 import { UserController } from './controller/UserController';
 
-createExpressServer({
+const app = await createExpressServer({
   routePrefix: '/api',
   controllers: [UserController],
-}).listen(3000);
+});
+app.listen(3000);
 ```
 
 > koa users must use `createKoaServer` instead of `createExpressServer`
@@ -435,6 +452,23 @@ getUsers(@QueryParams() query: GetUsersQuery) {
     // here you can access query.role, query.limit
     // and others valid query parameters
     // query.ids will be an array, of numbers, even with one element
+}
+```
+
+You can use nested objects within query strings.
+
+`GET /blogs?filter[keyword]=ABCD&filter[limit]=30&filter[offset]=0`
+
+```typescript
+interface BlogFilter {
+  keyword: string;
+  limit: number;
+  offset: number;
+}
+
+@Get('/blogs')
+getAll(@QueryParam('filter', { required: true, parse: true }) filter: BlogFilter) {
+  // here you can access filter.keyword, filter.limit and filter.offset
 }
 ```
 
@@ -559,7 +593,7 @@ saveFile(@UploadedFile("fileName", { options: fileUploadOptions }) file: any) {
 ```
 
 To inject all uploaded files use `@UploadedFiles` decorator instead.
-Routing-controllers uses [multer][3] to handle file uploads.
+Routing-controllers-extended uses [multer][3] to handle file uploads.
 You can install multer's file definitions via typings, and use `files: File[]` type instead of `any[]`.
 
 #### Make parameter required
@@ -802,7 +836,7 @@ you can enable it in routing-controllers-extended options.
 import { createExpressServer } from 'routing-controllers-extended';
 import { UserController } from './UserController';
 
-const app = createExpressServer({
+const app = await createExpressServer({
   cors: true,
   controllers: [UserController],
 });
@@ -818,7 +852,7 @@ You can pass cors options as well:
 import { createExpressServer } from 'routing-controllers-extended';
 import { UserController } from './UserController';
 
-const app = createExpressServer({
+const app = await createExpressServer({
   cors: {
     // options from cors documentation
   },
@@ -845,7 +879,7 @@ this option is set to `'extended'` by default.
 import { createExpressServer } from 'routing-controllers-extended';
 import { UserController } from './UserController';
 
-const app = createExpressServer({
+const app = await createExpressServer({
   express: {
     queryParser: 'simple', // 'extended' by default
   },
@@ -863,7 +897,7 @@ You can override default status code in routing-controllers-extended options.
 import { createExpressServer } from 'routing-controllers-extended';
 import { UserController } from './UserController';
 
-const app = createExpressServer({
+const app = await createExpressServer({
   defaults: {
     //with this option, null will return 404 by default
     nullResultCode: 404,
@@ -945,8 +979,9 @@ For example, lets try to use [compression](https://github.com/expressjs/compress
    ```typescript
    import { createExpressServer } from 'routing-controllers-extended';
    import { UserController } from './UserController'; // we need to "load" our controller before call createExpressServer. this is required
-   let compression = require('compression');
-   let app = createExpressServer({
+   import compression from 'compression';
+
+   let app = await createExpressServer({
      controllers: [UserController],
    }); // creates express app, registers all controller routes and returns you express app instance
    app.use(compression());
@@ -1105,10 +1140,11 @@ import { createExpressServer } from 'routing-controllers-extended';
 import { UserController } from './UserController';
 import { LoggingMiddleware } from './LoggingMiddleware';
 
-createExpressServer({
+const app = await createExpressServer({
   controllers: [UserController],
   middlewares: [LoggingMiddleware],
-}).listen(3000);
+});
+app.listen(3000);
 ```
 
 ### Error handlers
@@ -1134,9 +1170,10 @@ Custom error handlers are invoked after the default error handler, so you won't 
 To prevent this, you have to disable default error handler by specifying `defaultErrorHandler` option in createExpressServer or useExpressServer:
 
 ```typescript
-createExpressServer({
+const app = await createExpressServer({
   defaultErrorHandler: false, // disable default error handler, only if you have your own error handler
-}).listen(3000);
+});
+app.listen(3000);
 ```
 
 ### Loading middlewares, interceptors and controllers from directories
@@ -1147,11 +1184,12 @@ Also you can load middlewares from directories. Also you can use glob patterns:
 import { createExpressServer } from 'routing-controllers-extended';
 import path from 'path';
 
-createExpressServer({
+const app = await createExpressServer({
   controllers: [path.join(__dirname, '/controllers/**/*.js')],
   middlewares: [path.join(__dirname, '/middlewares/**/*.js')],
   interceptors: [path.join(__dirname, '/interceptors/**/*.js')],
-}).listen(3000);
+});
+app.listen(3000);
 ```
 
 ## Using interceptors
@@ -1237,9 +1275,10 @@ To use it simply specify a `classTransformer: true` option on application bootst
 ```typescript
 import { createExpressServer } from 'routing-controllers-extended';
 
-createExpressServer({
+const app = await createExpressServer({
   classTransformer: true,
-}).listen(3000);
+});
+app.listen(3000);
 ```
 
 Now, when you parse your action params, if you have specified a class, routing-controllers-extended will create you a class
@@ -1308,9 +1347,10 @@ It can be done easily thanks to integration with [class-validator][9]. This beha
 ```typescript
 import { createExpressServer } from 'routing-controllers-extended';
 
-createExpressServer({
+const app = await createExpressServer({
   validation: false,
-}).listen(3000);
+});
+app.listen(3000);
 ```
 
 If you want to turn on the validation only for some params, not globally for every parameter, you can do this locally by setting `validate: true` option in parameter decorator options object:
@@ -1357,7 +1397,7 @@ This technique works not only with `@Body` but also with `@Param`, `@QueryParam`
 
 ## Using authorization features
 
-Routing-controllers comes with two decorators helping you to organize authorization in your application.
+Routing-controllers-extended comes with two decorators helping you to organize authorization in your application.
 
 #### `@Authorized` decorator
 
@@ -1366,7 +1406,7 @@ To make `@Authorized` decorator to work you need to setup special routing-contro
 ```typescript
 import { createExpressServer, Action } from 'routing-controllers-extended';
 
-createExpressServer({
+const app = await createExpressServer({
   authorizationChecker: async (action: Action, roles: string[]) => {
     // here you can use request/response objects from action
     // also if decorator defines roles it needs to access the action
@@ -1382,7 +1422,8 @@ createExpressServer({
 
     return false;
   },
-}).listen(3000);
+});
+app.listen(3000);
 ```
 
 You can use `@Authorized` on controller actions:
@@ -1407,7 +1448,7 @@ To make `@CurrentUser` decorator to work you need to setup special routing-contr
 ```typescript
 import { createExpressServer, Action } from 'routing-controllers-extended';
 
-createExpressServer({
+const app = await createExpressServer({
   currentUserChecker: async (action: Action) => {
     // here you can use request/response objects from action
     // you need to provide a user object that will be injected in controller actions
@@ -1415,7 +1456,8 @@ createExpressServer({
     const token = action.request.headers['authorization'];
     return getEntityManager().findOneByToken(User, token);
   },
-}).listen(3000);
+});
+app.listen(3000);
 ```
 
 You can use `@CurrentUser` on controller actions:
@@ -1450,11 +1492,12 @@ import path from 'path';
 useContainer(Container);
 
 // create and run server
-createExpressServer({
+const app = await createExpressServer({
   controllers: [path.join(__dirname, '/controllers/*.js')],
   middlewares: [path.join(__dirname, '/middlewares/*.js')],
   interceptors: [path.join(__dirname, '/interceptors/*.js')],
-}).listen(3000);
+});
+app.listen(3000);
 ```
 
 That's it, now you can inject your services into your controllers:
@@ -1608,11 +1651,7 @@ export class QuestionController {
 
 ## Samples
 
-- Take a look on [routing-controllers with express](https://github.com/typestack/routing-controllers-express-demo) which is using routing-controllers.
-- Take a look on [routing-controllers with koa](https://github.com/typestack/routing-controllers-koa-demo) which is using routing-controllers.
-- Take a look on [routing-controllers with angular 2](https://github.com/typestack/routing-controllers-angular2-demo) which is using routing-controllers.
-- Take a look on [node-microservice-demo](https://github.com/swimlane/node-microservice-demo) which is using routing-controllers.
-- Take a look on samples in [./sample](https://github.com/spicemc/rce/tree/master/sample) for more examples
+- Take a look on samples in [./sample](https://github.com/spicemc/rce/tree/develop/sample) for more examples
   of usage.
 
 ## Release notes

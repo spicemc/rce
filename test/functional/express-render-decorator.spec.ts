@@ -15,7 +15,7 @@ describe(``, () => {
   let expressServer: HttpServer;
 
   describe('template rendering', () => {
-    beforeAll((done: DoneCallback) => {
+    beforeAll(async () => {
       getMetadataArgsStorage().reset();
 
       @Controller()
@@ -40,12 +40,12 @@ describe(``, () => {
       }
 
       const resourcePath: string = path.resolve(__dirname, '../resources');
-      const expressApplication: ExpressApplication = createExpressServer();
+      const expressApplication: ExpressApplication = await createExpressServer();
       expressApplication.engine('html', mustacheExpress());
       expressApplication.set('view engine', 'html');
       expressApplication.set('views', resourcePath);
       expressApplication.use(express.static(resourcePath));
-      expressServer = expressApplication.listen(3001, done);
+      expressServer = expressApplication.listen(3001);
     });
 
     afterAll((done: DoneCallback) => {

@@ -27,10 +27,6 @@ jobs:
           node-version: ${{ matrix.node-version }}
       - run: npm ci --ignore-scripts
       - run: npm run test:ci
-      # - run: npm install codecov -g
-      #   if: ${{ matrix.node-version == 'current' }}
-      # - run: codecov -f ./coverage/clover.xml -t ${{ secrets.CODECOV_TOKEN }} --commit=$GITHUB_SHA --branch=${GITHUB_REF##*/}
-      #   if: ${{ matrix.node-version == 'current' }}
   build:
     name: Build
     runs-on: ubuntu-latest
@@ -40,6 +36,8 @@ jobs:
         with:
           node-version: 'lts/*'
       - run: npm ci --ignore-scripts
-      - run: npm run build:es2015
+      - run: npm run build:esm
       - run: npm run build:cjs
       - run: npm run build:types
+      - run: npm run check:cjs
+      - run: npm run check:esm

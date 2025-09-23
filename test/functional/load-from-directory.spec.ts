@@ -11,14 +11,15 @@ describe(``, () => {
   let expressServer: HttpServer;
 
   describe('loading all controllers from the given directories', () => {
-    beforeAll((done: DoneCallback) => {
+    beforeAll(async () => {
       getMetadataArgsStorage().reset();
-      expressServer = createExpressServer({
+      const expressApp = await createExpressServer({
         controllers: [
           __dirname + '/../fakes/global-options/first-controllers/**/*{.js,.ts}',
           __dirname + '/../fakes/global-options/second-controllers/*{.js,.ts}',
         ],
-      }).listen(3001, done);
+      });
+      expressServer = expressApp.listen(3001);
     });
 
     afterAll((done: DoneCallback) => {
@@ -59,7 +60,7 @@ describe(``, () => {
   });
 
   describe('loading all express middlewares and error handlers from the given directories', () => {
-    beforeAll((done: DoneCallback) => {
+    beforeAll(async () => {
       getMetadataArgsStorage().reset();
 
       @Controller()
@@ -75,9 +76,10 @@ describe(``, () => {
         }
       }
 
-      expressServer = createExpressServer({
+      const expressApp = await createExpressServer({
         middlewares: [__dirname + '/../fakes/global-options/express-middlewares/**/*{.js,.ts}'],
-      }).listen(3001, done);
+      });
+      expressServer = expressApp.listen(3001);
     });
 
     afterAll((done: DoneCallback) => {

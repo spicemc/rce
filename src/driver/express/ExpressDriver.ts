@@ -13,42 +13,48 @@ import { getFromContainer } from '../../container';
 import { AuthorizationRequiredError } from '../../error/AuthorizationRequiredError';
 import { NotFoundError, RoutingControllersOptions } from '../../index';
 import { Callable } from '../../types/Types';
+import { importDefault } from '../../util/importDefault';
 
-const cookie = require('cookie');
+import * as cookie from 'cookie';
 
-const templateUrl = require('template-url');
+import templateUrlModule from 'template-url';
+const templateUrl = templateUrlModule.default ?? templateUrlModule;
 
 /**
  * Integration with express framework.
  */
 export class ExpressDriver extends BaseDriver {
-  // -------------------------------------------------------------------------
-  // Constructor
-  // -------------------------------------------------------------------------
+  express: any;
 
-  constructor(public express?: any) {
+  constructor() {
     super();
-    this.loadExpress();
-    this.app = this.express;
   }
 
   // -------------------------------------------------------------------------
   // Public Methods
   // -------------------------------------------------------------------------
 
+  async setApp(express?: any) {
+    if (express) {
+      this.express = express;
+    } else {
+      await this.loadExpress();
+      this.app = this.express;
+    }
+  }
   /**
    * Initializes the things driver needs before routes and middlewares registration.
    */
-  initialize(options: RoutingControllersOptions) {
+  async initialize(options: RoutingControllersOptions) {
     this.express.set('query parser', options.express?.queryParser ?? 'extended');
 
-    if (this.cors) {
-      const cors = require('cors');
-      if (this.cors === true) {
-        this.express.use(cors());
-      } else {
-        this.express.use(cors(this.cors));
-      }
+    const corsMod = await import('cors');
+    const corsFn = corsMod.default ?? corsMod;
+
+    if (this.cors === true) {
+      this.express.use(corsFn());
+    } else {
+      this.express.use(corsFn(this.cors));
     }
   }
 
@@ -64,7 +70,6 @@ export class ExpressDriver extends BaseDriver {
         (middleware.instance as ExpressErrorMiddlewareInterface).error(error, request, response, next);
       };
     }
-
     // if its a regular middleware then register it as express middleware
     else if ((middleware.instance as ExpressMiddlewareInterface).use) {
       middlewareWrapper = (request: any, response: any, next: (err: any) => any) => {
@@ -96,8 +101,10 @@ export class ExpressDriver extends BaseDriver {
   /**
    * Registers action in the driver.
    */
-  registerAction(actionMetadata: ActionMetadata, executeCallback: (options: Action) => any): void {
-    const express = require('express');
+  async registerAction(actionMetadata: ActionMetadata, executeCallback: (options: Action) => any): Promise<void> {
+    const expMod = await import('express');
+    const express = expMod.default ?? expMod;
+
     // middlewares required for this action
     const defaultMiddlewares: any[] = [];
 
@@ -143,7 +150,7 @@ export class ExpressDriver extends BaseDriver {
     }
 
     if (actionMetadata.isFileUsed || actionMetadata.isFilesUsed) {
-      const multer = this.loadMulter();
+      const multer = await this.loadMulter();
       actionMetadata.params
         .filter(param => param.type === 'file')
         .forEach(param => {
@@ -445,30 +452,32 @@ export class ExpressDriver extends BaseDriver {
   /**
    * Dynamically loads express module.
    */
-  protected loadExpress() {
-    if (require) {
-      if (!this.express) {
-        try {
-          this.express = require('express')();
-          // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        } catch (e) {
-          throw new Error('express package was not found installed. Try to install it: npm install express --save');
+  protected async loadExpress(): Promise<void> {
+    if (!this.express) {
+      try {
+        const expMod = await import('express');
+        const exp = expMod.default ?? expMod;
+
+        if (typeof exp !== 'function') {
+          throw new Error('Express default export is not callable');
         }
+
+        this.express = exp();
+      } catch {
+        throw new Error('express package was not found. Install with `npm install express --save`.');
       }
-    } else {
-      throw new Error('Cannot load express. Try to install all required dependencies.');
     }
   }
 
   /**
    * Dynamically loads multer module.
    */
-  protected loadMulter() {
+  protected async loadMulter(): Promise<any> {
     try {
-      return require('multer');
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    } catch (e) {
-      throw new Error('multer package was not found installed. Try to install it: npm install multer --save');
+      const multer = await importDefault<typeof import('multer')>('multer');
+      return multer;
+    } catch {
+      throw new Error('multer package was not found. Install with `npm install multer --save`.');
     }
   }
 }

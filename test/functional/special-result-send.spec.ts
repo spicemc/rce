@@ -16,7 +16,7 @@ describe(``, () => {
   describe('special result value treatment', () => {
     const rawData = [0xff, 0x66, 0xaa, 0xcc];
 
-    beforeAll((done: DoneCallback) => {
+    beforeAll(async () => {
       getMetadataArgsStorage().reset();
 
       @JsonController()
@@ -40,7 +40,8 @@ describe(``, () => {
         }
       }
 
-      expressServer = createExpressServer().listen(3001, done);
+      const expressApp = await createExpressServer();
+      expressServer = expressApp.listen(3001);
     });
 
     afterAll((done: DoneCallback) => {

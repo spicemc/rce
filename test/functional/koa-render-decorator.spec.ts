@@ -14,7 +14,7 @@ describe(``, () => {
   let koaServer: HttpServer;
 
   describe('koa template rendering', () => {
-    beforeAll((done: DoneCallback) => {
+    beforeAll(async () => {
       getMetadataArgsStorage().reset();
 
       @Controller()
@@ -42,7 +42,7 @@ describe(``, () => {
 
       const resourcePath: string = path.resolve(__dirname, '../resources');
 
-      const koaApp = createKoaServer() as Koa;
+      const koaApp = (await createKoaServer()) as Koa;
       koaEjs(koaApp, {
         root: resourcePath,
         layout: false,
@@ -51,7 +51,7 @@ describe(``, () => {
         debug: false,
       });
 
-      koaServer = koaApp.listen(3001, done);
+      koaServer = koaApp.listen(3001);
     });
 
     afterAll((done: DoneCallback) => {

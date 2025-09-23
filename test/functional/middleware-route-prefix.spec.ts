@@ -20,7 +20,7 @@ describe(``, () => {
       middlewaresOrder = [];
     });
 
-    beforeAll((done: DoneCallback) => {
+    beforeAll(async () => {
       getMetadataArgsStorage().reset();
 
       @Middleware({ type: 'after' })
@@ -55,16 +55,17 @@ describe(``, () => {
         }
       }
 
-      expressServer1 = createExpressServer({
+      const expressApp1 = await createExpressServer({
         routePrefix: '/app',
         middlewares: [FirstAfterMiddleware, SecondAfterMiddleware, ThirdAfterMiddleware],
-      }).listen(3001);
+      });
+      expressServer1 = expressApp1.listen(3001);
 
-      expressServer2 = createExpressServer({
+      const expressApp2 = await createExpressServer({
         routePrefix: '/admin',
         middlewares: [SecondAfterMiddleware],
-      }).listen(3011);
-      done();
+      });
+      expressServer2 = expressApp2.listen(3011);
     });
 
     afterAll((done: DoneCallback) => {

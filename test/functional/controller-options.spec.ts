@@ -21,7 +21,7 @@ describe(``, () => {
       lastName: string;
     }
 
-    beforeAll(done => {
+    beforeAll(async () => {
       // reset metadata args storage
       getMetadataArgsStorage().reset();
 
@@ -57,7 +57,8 @@ describe(``, () => {
         }
       }
 
-      expressServer = createExpressServer().listen(3001, done);
+      const expressApp = await createExpressServer();
+      expressServer = expressApp.listen(3001);
     });
 
     afterAll(done => {

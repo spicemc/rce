@@ -113,65 +113,86 @@ export function getMetadataArgsStorage(): MetadataArgsStorage {
 /**
  * Registers all loaded actions in your express application.
  */
-export function useExpressServer<T>(expressServer: T, options?: RoutingControllersOptions): T {
-  const driver = new ExpressDriver(expressServer);
+export async function useExpressServer<T>(expressServer: T, options?: RoutingControllersOptions): Promise<T> {
+  const driver = new ExpressDriver();
+  await driver.setApp(expressServer);
   return createServer(driver, options);
 }
 
 /**
  * Registers all loaded actions in your express application.
  */
-export function createExpressServer(options?: RoutingControllersOptions): any {
+export async function createExpressServer(options?: RoutingControllersOptions): Promise<any> {
   const driver = new ExpressDriver();
+  await driver.setApp();
   return createServer(driver, options);
 }
 
 /**
  * Registers all loaded actions in your koa application.
  */
-export function useKoaServer<T>(koaApp: T, options?: RoutingControllersOptions): T {
-  const driver = new KoaDriver(koaApp);
-  return createServer(driver, options);
-}
-
-/**
- * Registers all loaded actions in your koa application.
- */
-export function createKoaServer(options?: RoutingControllersOptions): any {
+export async function useKoaServer<T>(koaApp: T, options?: RoutingControllersOptions): Promise<T> {
   const driver = new KoaDriver();
+  await driver.setApp(koaApp);
+  return createServer(driver, options);
+}
+
+/**
+ * Registers all loaded actions in your koa application.
+ */
+export async function createKoaServer(options?: RoutingControllersOptions): Promise<any> {
+  const driver = new KoaDriver();
+  await driver.setApp();
   return createServer(driver, options);
 }
 
 /**
  * Registers all loaded actions in your application using selected driver.
  */
-export function createServer<T extends BaseDriver>(driver: T, options?: RoutingControllersOptions): any {
-  createExecutor(driver, options);
+export async function createServer<T extends BaseDriver>(driver: T, options?: RoutingControllersOptions): Promise<any> {
+  await createExecutor(driver, options);
   return driver.app;
 }
 
 /**
  * Registers all loaded actions in your express application.
  */
-export function createExecutor<T extends BaseDriver>(driver: T, options: RoutingControllersOptions = {}): void {
+export async function createExecutor<T extends BaseDriver>(
+  driver: T,
+  options: RoutingControllersOptions = {},
+): Promise<void> {
   // import all controllers and middlewares and error handlers (new way)
   let controllerClasses: Newable[] | undefined;
-  if (options && options.controllers && options.controllers.length) {
-    controllerClasses = (options.controllers as any[]).filter(controller => controller instanceof Function);
-    const controllerDirs = (options.controllers as any[]).filter(controller => typeof controller === 'string');
-    controllerClasses.push(...importClassesFromDirectories(controllerDirs));
+  if (options?.controllers?.length) {
+    const directCtrls = (options.controllers as any[]).filter((item): item is Newable => typeof item === 'function');
+
+    const ctrlDirs = (options.controllers as any[]).filter((item): item is string => typeof item === 'string');
+
+    const importedCtrls = ctrlDirs.length ? await importClassesFromDirectories(ctrlDirs) : [];
+
+    controllerClasses = [...directCtrls, ...importedCtrls];
   }
+
   let middlewareClasses: Newable[] | undefined;
-  if (options && options.middlewares && options.middlewares.length) {
-    middlewareClasses = (options.middlewares as any[]).filter(controller => controller instanceof Function);
-    const middlewareDirs = (options.middlewares as any[]).filter(controller => typeof controller === 'string');
-    middlewareClasses.push(...importClassesFromDirectories(middlewareDirs));
+  if (options?.middlewares?.length) {
+    const directMws = (options.middlewares as any[]).filter((item): item is Newable => typeof item === 'function');
+
+    const mwDirs = (options.middlewares as any[]).filter((item): item is string => typeof item === 'string');
+
+    const importedMws = mwDirs.length ? await importClassesFromDirectories(mwDirs) : [];
+
+    middlewareClasses = [...directMws, ...importedMws];
   }
+
   let interceptorClasses: Newable[] | undefined;
-  if (options && options.interceptors && options.interceptors.length) {
-    interceptorClasses = (options.interceptors as any[]).filter(controller => controller instanceof Function);
-    const interceptorDirs = (options.interceptors as any[]).filter(controller => typeof controller === 'string');
-    interceptorClasses.push(...importClassesFromDirectories(interceptorDirs));
+  if (options?.interceptors?.length) {
+    const directInt = (options.interceptors as any[]).filter((item): item is Newable => typeof item === 'function');
+
+    const intDirs = (options.interceptors as any[]).filter((item): item is string => typeof item === 'string');
+
+    const importedInt = intDirs.length ? await importClassesFromDirectories(intDirs) : [];
+
+    interceptorClasses = [...directInt, ...importedInt];
   }
 
   if (options && options.development !== undefined) {
@@ -213,12 +234,12 @@ export function createExecutor<T extends BaseDriver>(driver: T, options: Routing
   driver.cors = options.cors;
 
   // next create a controller executor
-  new RoutingControllers(driver, options)
-    .initialize(options)
-    .registerInterceptors(interceptorClasses)
-    .registerMiddlewares('before', middlewareClasses)
-    .registerControllers(controllerClasses)
-    .registerMiddlewares('after', middlewareClasses); // todo: register only for loaded controllers?
+  const routingControllers = new RoutingControllers(driver, options);
+  await routingControllers.initialize(options);
+  routingControllers.registerInterceptors(interceptorClasses);
+  routingControllers.registerMiddlewares('before', middlewareClasses);
+  await routingControllers.registerControllers(controllerClasses);
+  routingControllers.registerMiddlewares('after', middlewareClasses); // todo: register only for loaded controllers?
 }
 
 /**

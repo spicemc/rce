@@ -19,7 +19,7 @@ describe(``, () => {
       middlewaresOrder = [];
     });
 
-    beforeAll((done: DoneCallback) => {
+    beforeAll(async () => {
       getMetadataArgsStorage().reset();
 
       @Middleware({ type: 'after' })
@@ -54,9 +54,10 @@ describe(``, () => {
         }
       }
 
-      expressServer = createExpressServer({
+      const expressApp = await createExpressServer({
         middlewares: [FirstAfterMiddleware, SecondAfterMiddleware, ThirdAfterMiddleware],
-      }).listen(3001, done);
+      });
+      expressServer = expressApp.listen(3001);
     });
 
     afterAll((done: DoneCallback) => {
@@ -80,7 +81,7 @@ describe(``, () => {
       middlewaresOrder = [];
     });
 
-    beforeAll((done: DoneCallback) => {
+    beforeAll(async () => {
       getMetadataArgsStorage().reset();
 
       @Middleware({ type: 'after', priority: 0 })
@@ -115,9 +116,10 @@ describe(``, () => {
         }
       }
 
-      expressServer = createExpressServer({
+      const expressApp = await createExpressServer({
         middlewares: [SecondAfterMiddleware, ThirdAfterMiddleware, FirstAfterMiddleware],
-      }).listen(3001, done);
+      });
+      expressServer = expressApp.listen(3001);
     });
 
     afterAll((done: DoneCallback) => {
