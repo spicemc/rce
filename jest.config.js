@@ -1,6 +1,9 @@
 module.exports = {
   preset: 'ts-jest',
   testEnvironment: 'node',
+  testEnvironmentOptions: {
+    storage: "none"
+  },
   collectCoverageFrom: ['src/**/*.ts', '!src/**/index.ts', '!src/**/*.interface.ts'],
   globals: {},
   setupFilesAfterEnv: ["./jest.setup.js"],
