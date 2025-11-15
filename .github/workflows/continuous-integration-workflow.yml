@@ -2,6 +2,7 @@ name: CI
 on: [push, pull_request]
 
 permissions:
+  id-token: write
   contents: read
 
 jobs:
@@ -9,8 +10,8 @@ jobs:
     name: Linters
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v6
         with:
           node-version: 'lts/*'
       - run: npm ci --ignore-scripts
@@ -24,9 +25,9 @@ jobs:
         node-version: ['lts/*', 'current']
       fail-fast: false
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Setting up Node.js (v${{ matrix.node-version }}.x)
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version: ${{ matrix.node-version }}
       - run: npm ci --ignore-scripts
@@ -35,8 +36,8 @@ jobs:
     name: Build
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v6
         with:
           node-version: 'lts/*'
       - run: npm ci --ignore-scripts
