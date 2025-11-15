@@ -13,7 +13,7 @@ jobs:
       - uses: actions/setup-node@v6
         with:
           node-version: 'lts/*'
-      - run: npm ci --ignore-scripts
+      - run: npm ci
       - run: npm run prettier:check
       - run: npm run lint:check
   tests:
@@ -29,7 +29,7 @@ jobs:
         uses: actions/setup-node@v6
         with:
           node-version: ${{ matrix.node-version }}
-      - run: npm ci --ignore-scripts
+      - run: npm ci
       - run: npm run test:ci
   build:
     name: Build
@@ -39,7 +39,7 @@ jobs:
       - uses: actions/setup-node@v6
         with:
           node-version: 'lts/*'
-      - run: npm ci --ignore-scripts
+      - run: npm ci
       - run: npm run build:esm
       - run: npm run build:cjs
       - run: npm run build:types
