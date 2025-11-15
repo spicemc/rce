@@ -29,12 +29,6 @@ jobs:
         uses: actions/setup-node@v6
         with:
           node-version: ${{ matrix.node-version }}
-      - name: Debug npm environment
-        run: |
-          node -v
-          npm -v
-          npm ls koa
-          ls -la node_modules/koa || echo "No koa folder"
       - run: npm ci --ignore-scripts
       - run: npm run test:ci
   build:
