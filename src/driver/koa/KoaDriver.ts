@@ -386,7 +386,7 @@ export class KoaDriver extends BaseDriver {
         this.koa = new koa();
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
       } catch (e) {
-        throw new Error('koa package was not found installed. Try to install it: npm install koa@next --save');
+        throw new Error('koa package was not found installed. Try to install it: npm install koa --save');
       }
     } else {
       throw new Error('Cannot load koa. Try to install all required dependencies.');
