@@ -1,5 +1,20 @@
 # Changelog and release notes
 
+### 3.0.1
+
+- Introduced OIDC
+- Missing changelog added
+
+### 3.0.0
+
+- Works with Express 5 and Koa 3
+- ESM and CommonJS builds available
+- New Express query parser setting
+- Docs updated
+- Samples upgraded
+- Dependencies upgraded
+- [BREAKING CHANGE] Introduced async bootstrapping
+
 ### 2.0.0
 
 - Updated packages

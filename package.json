@@ -1,7 +1,7 @@
 {
   "name": "routing-controllers-extended",
   "private": false,
-  "version": "3.0.0",
+  "version": "3.0.1",
   "description": "A lightweight and highly adaptable TypeScript framework for building REST-APIs and microservices with Express or Koa. It features full support for ESM and CommonJS. Designed for rapid development it provides a flexible controller-based architecture that scales with your needs.",
   "author": "TypeStack contributors",
   "license": "MIT",
